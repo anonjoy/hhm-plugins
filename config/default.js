@@ -34,11 +34,11 @@ HHM.config.version = `1.0.0`;
  */
 HHM.config.room = {
   roomName: `test`,
-  playerName : ``,
+  // playerName : `bot name`,
   maxPlayers: 30,
   noPlayer: true,
   public : false,
-  password: ``,
+  // password: `password`,
   // geo: { code: `FI`, lat: 60.192059, lon: 24.945831 },
   // token: `insert your token here`
 };
@@ -59,9 +59,9 @@ HHM.config.postInit = HBInit => {
 
   room.onRoomLink = () => {
     // Put your changes here
-    room.setDefaultStadium(`Big`);
-    room.setScoreLimit(0);
-    room.setTimeLimit(7);
+    room.setDefaultStadium(`Classic`);
+    room.setScoreLimit(3);
+    room.setTimeLimit(3);
   }
 };
 
@@ -82,12 +82,6 @@ HHM.config.plugins = {
   },
   'sav/core': {},
   'sav/plugin-control': {},
-  'sav/players': {
-    ghostKick : false,
-  },
-  'sav/chat': {
-    enableChannels: false,
-  },
   'test/password': {},
 };
 
