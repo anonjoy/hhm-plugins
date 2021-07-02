@@ -28,6 +28,7 @@ room.onCommand1_password = function ( player, arguments, argumentString ) {
   if ( roles.ensurePlayerRoles( player.id, config.allowedRoles, room ) ) {
     room.setPassword( arguments[0] );
     room.sendAnnouncement(`Password has been set!`, null, 0xFF0000);
+    return false;
   }
 }
 
@@ -37,5 +38,6 @@ room.onCommand0_clearpassword = function ( player ) {
   if ( roles.ensurePlayerRoles( player.id, config.allowedRoles, room ) ) {
     room.setPassword( null );
     room.sendAnnouncement(`Password has been cleared!`, null, 0x00FF00);
+    return false;
   }
 }
