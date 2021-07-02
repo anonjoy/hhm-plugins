@@ -33,14 +33,14 @@ HHM.config.version = `1.0.0`;
  * room instance to start the plugin system.
  */
 HHM.config.room = {
-  roomName: `haxroomie`,
-  playerName : `host`,
-  maxPlayers: 16,
+  roomName: `test`,
+  playerName : ``,
+  maxPlayers: 30,
   noPlayer: true,
   public : false,
   password: ``,
-  geo: { code: `FI`, lat: 60.192059, lon: 24.945831 },
-  token: `insert your token here`
+  // geo: { code: `FI`, lat: 60.192059, lon: 24.945831 },
+  // token: `insert your token here`
 };
 
 /**
@@ -76,13 +76,19 @@ HHM.config.postInit = HBInit => {
 HHM.config.plugins = {
   'sav/roles': {
     roles: {
-      'host': `hostpass CHANGE ME`,
-      'admin': 'adminpass CHANGE ME'
+      'host': '123456',
+      'admin': '1234'
     },
   },
   'sav/core': {},
   'sav/plugin-control': {},
-  'hr/spam': {},
+  'sav/players': {
+    ghostKick : false,
+  },
+  'sav/chat': {
+    enableChannels: false,
+  },
+  'test/password': {},
 };
 
 /**
@@ -130,6 +136,10 @@ HHM.config.repositories = [
   {
     type: `github`,
     repository: `morko/hhm-sala-plugins`,
+  },
+  {
+    type: `github`,
+    repository: `ayudantehax/hhm-plugins`,
   },
 ];
 
