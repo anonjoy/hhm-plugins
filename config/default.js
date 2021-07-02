@@ -82,7 +82,6 @@ HHM.config.plugins = {
   },
   'sav/core': {},
   'sav/plugin-control': {},
-  'sav/help': {},
   'test/password': {},
 };
 
