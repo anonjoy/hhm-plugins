@@ -32,7 +32,7 @@ room.onCommand1_password = function ( player, arguments, argumentString ) {
   }
 }
 
-room.onCommand_clearpassword = function ( player ) {
+room.onCommand0_clearpassword = function ( player ) {
   let roles = room.getPlugin(`sav/roles`);
   if ( !roles ) return;
   if ( roles.ensurePlayerRoles( player.id, config.allowedRoles, room ) ) {
