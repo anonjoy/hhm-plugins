@@ -1,0 +1,11 @@
+{
+  "name": "ayudantehax/hhm-plugins",
+  "description": "mbappe's HHM plugins.",
+  "author": "mbappe",
+  "config": {
+    "path": "src"
+  },
+  "plugins": [
+    "test/password",
+  ]
+}
