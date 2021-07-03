@@ -76,9 +76,10 @@ HHM.config.postInit = HBInit => {
 HHM.config.plugins = {
   'sav/roles': {
     roles: {
-      'host': '123456',
-      'admin': '1234'
+      'host': `123456`,
+      'admin': `1234`
     },
+    defaultRole: `user`,
   },
   'sav/core': {},
   'sav/plugin-control': {},
