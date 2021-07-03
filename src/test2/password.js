@@ -1,7 +1,7 @@
 var room = HBInit();
 
 room.pluginSpec = {
-  name: `test2/password`,
+  name: `test/password`,
   author: `mbappe`,
   version: `1.0.0`,
   config: {
@@ -18,7 +18,7 @@ const config = room.getConfig();
 
 const onCommandPasswordHandlerData = {
   'sav/help': {
-    text: ` PASSWORD`,
+    text: ` PASSWORD, to put a password in the room.`,
     roles: config.allowedRoles,
   },
 };
@@ -35,6 +35,7 @@ function onCommandPasswordHandler ( player, arguments, argumentString ) {
 
 const onCommandClearPasswordHandlerData = {
   'sav/help': {
+    text: ` to clear the room password.`,
     roles: config.allowedRoles,
   },
 };
