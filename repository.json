@@ -6,6 +6,6 @@
     "path": "src"
   },
   "plugins": [
-    "test/password",
+    "test2/password",
   ]
 }
