@@ -134,6 +134,7 @@ HHM.config.repositories = [
   {
     type: `github`,
     repository: `ayudantehax/hhm-plugins`,
+    version: `1.0.1`,
   },
 ];
 
