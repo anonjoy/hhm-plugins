@@ -45,7 +45,7 @@ function onCommandClearPasswordHandler ( player ) {
   if ( !roles ) return;
   if ( roles.ensurePlayerRoles( player.id, config.allowedRoles, room ) ) {
     room.setPassword( null );
-    room.sendAnnouncement(`Password has been cleared!a`, null, 0x00FF00);
+    room.sendAnnouncement(`Password has been cleared!`, null, 0x00FF00);
     return false;
   }
 }
