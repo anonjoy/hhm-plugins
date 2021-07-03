@@ -1,3 +1,15 @@
+/*
+  
+  Comandos: 
+  - !password
+  - !clear password
+  
+  Nota:
+  '!help password' o '!help clear password' solo mostrara la descripción del comando a aquellos roles que tengan permitido usarlos.
+  Tampoco podran verlos en la lista '!help' si no tienen el rol correspondiente.
+  
+*/
+
 var room = HBInit();
 
 room.pluginSpec = {
