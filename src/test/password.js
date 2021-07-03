@@ -22,7 +22,7 @@ if ( help ) {
   help.registerHelp( `clearpassword`, ``, { numArgs: 0, roles: config.allowedRoles } );
 }
 
-room.onCommand1_password = function ( player, arguments, argumentString ) {
+function onCommandPasswordHandler ( player, arguments, argumentString ) {
   let roles = room.getPlugin(`sav/roles`);
   if ( !roles ) return;
   if ( roles.ensurePlayerRoles( player.id, config.allowedRoles, room ) ) {
@@ -32,7 +32,7 @@ room.onCommand1_password = function ( player, arguments, argumentString ) {
   }
 }
 
-room.onCommand0_clearpassword = function ( player ) {
+function onCommandClearPasswordHandler ( player ) {
   let roles = room.getPlugin(`sav/roles`);
   if ( !roles ) return;
   if ( roles.ensurePlayerRoles( player.id, config.allowedRoles, room ) ) {
@@ -41,3 +41,6 @@ room.onCommand0_clearpassword = function ( player ) {
     return false;
   }
 }
+
+room.onCommand1_password = onCommandPasswordHandler;
+room.onCommand0_clearpassword = onCommandClearPasswordHandler;
