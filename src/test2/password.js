@@ -1,7 +1,7 @@
 var room = HBInit();
 
 room.pluginSpec = {
-  name: `test/password`,
+  name: `test2/password`,
   author: `mbappe`,
   version: `1.0.0`,
   config: {
