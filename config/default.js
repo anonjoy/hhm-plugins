@@ -82,7 +82,7 @@ HHM.config.plugins = {
   },
   'sav/core': {},
   'sav/plugin-control': {},
-  'test2/password': {},
+  'test/password': {},
 };
 
 /**
