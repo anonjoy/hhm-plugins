@@ -16,11 +16,12 @@ room.pluginSpec = {
 
 const config = room.getConfig();
 
-let help = room.getPlugin(`sav/help`);
-if ( help ) {
-  help.registerHelp( `password`, `PASSWORD`, { numArgs: 1, roles: config.allowedRoles } );
-  help.registerHelp( `clearpassword`, ``, { numArgs: 0, roles: config.allowedRoles } );
-}
+const onCommandPasswordHandlerData = {
+  'sav/help': {
+    text: ` PASSWORD`,
+    roles: config.allowedRoles,
+  },
+};
 
 function onCommandPasswordHandler ( player, arguments, argumentString ) {
   let roles = room.getPlugin(`sav/roles`);
@@ -32,6 +33,12 @@ function onCommandPasswordHandler ( player, arguments, argumentString ) {
   }
 }
 
+const onCommandClearPasswordHandlerData = {
+  'sav/help': {
+    roles: config.allowedRoles,
+  },
+};
+
 function onCommandClearPasswordHandler ( player ) {
   let roles = room.getPlugin(`sav/roles`);
   if ( !roles ) return;
@@ -42,5 +49,12 @@ function onCommandClearPasswordHandler ( player ) {
   }
 }
 
-room.onCommand1_password = onCommandPasswordHandler;
-room.onCommand0_clearpassword = onCommandClearPasswordHandler;
+room.onCommand1_password = {
+  function: onCommandPasswordHandler,
+  data: onCommandPasswordHandlerData,
+};
+
+room.onCommand0_clear_password = {
+  function: onCommandClearPasswordHandler,
+  data: onCommandClearPasswordHandlerData,
+};
