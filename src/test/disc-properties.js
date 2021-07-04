@@ -77,6 +77,11 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
   if (isNaN(value)) return error(`Second`);
   if (!Number.isInteger(id)) return error(`Third`);
   if (discProperties[property] == `int` && !Number.isInteger(value)) return error(`Second`);
+  room.sendAnnouncement('DEBUG');
+  console.log(arguments);
+  console.log(property);
+  console.log(value);
+  console.log(id);
   onCommandDiscPropertiesHandler(id, {property : value});
 }
 
