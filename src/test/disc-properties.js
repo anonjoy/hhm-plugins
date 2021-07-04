@@ -49,10 +49,6 @@ function updateDiscProperties () {
 }
 
 function onCommandDiscPropertiesHandler ( id, properties ) {
-  room.sendAnnouncement('DEBUG 2');
-  console.log('------');
-  console.log(properties);
-  console.log(id);
   if ( !playersDiscProperties[id] ) playersDiscProperties[id] = {};
   for ( let [key, value] of Object.entries( properties ) ) {
     playersDiscProperties[id][key] = value;
@@ -81,12 +77,8 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
   if (isNaN(value)) return error(`Second`);
   if (!Number.isInteger(id)) return error(`Third`);
   if (discProperties[property] == `int` && !Number.isInteger(value)) return error(`Second`);
-  room.sendAnnouncement('DEBUG 1');
-  console.log(arguments);
-  console.log(property);
-  console.log(value);
-  console.log(id);
-  onCommandDiscPropertiesHandler(id, {property : value});
+  let properties[property] = value; 
+  onCommandDiscPropertiesHandler(id, properties);
 }
 
 const onCommandSizeHandlerData = {
