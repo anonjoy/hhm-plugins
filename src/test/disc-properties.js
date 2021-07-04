@@ -19,6 +19,10 @@ room.pluginSpec = {
 
 const config = room.getConfig();
 
+const getGameState = room.getPlugin(`sav/game-state`).getGameState;
+
+const roles = room.getPlugin(`sav/roles`);
+
 const discProperties = {
   'x' : `float`,
   'y' : `float`,
@@ -113,19 +117,15 @@ function onPlayerTeamChangeHandler ( player ) {
   if ( state == 1 || state == 2  ) updateDiscProperties();
 }
 
-room.onRoomLink = function onRoomLink() {
-  let getGameState = room.getPlugin(`sav/game-state`).getGameState;
-  let roles = room.getPlugin(`sav/roles`);
-  room.onCommand1_size = {
-    function: onCommandSizeHandler,
-    data: onCommandSizeHandlerData,
-  };
-  room.onCommand3_disc = {
-    function: onCommandDiscHandler,
-    data: onCommandDiscHandlerData,
-  };
-  room.onPlayerLeave = onPlayerLeaveHandler;
-  room.onGameStart = onGameStartHandler;
-  room.onPositionsReset = onPositionsResetHandler;
-  room.onPlayerTeamChange = onPlayerTeamChangeHandler;
-}
+room.onCommand1_size = {
+  function: onCommandSizeHandler,
+  data: onCommandSizeHandlerData,
+};
+room.onCommand3_disc = {
+  function: onCommandDiscHandler,
+  data: onCommandDiscHandlerData,
+};
+room.onPlayerLeave = onPlayerLeaveHandler;
+room.onGameStart = onGameStartHandler;
+room.onPositionsReset = onPositionsResetHandler;
+room.onPlayerTeamChange = onPlayerTeamChangeHandler;
