@@ -59,16 +59,12 @@ function onCommandClearPasswordHandler ( player ) {
   }
 }
 
+room.onCommand1_password = {
+  function: onCommandPasswordHandler,
+  data: onCommandPasswordHandlerData,
+};
 
-room.onRoomLink = function onRoomLink() {
-  const roles = room.getPlugin(`sav/roles`);
-  room.onCommand1_password = {
-    function: onCommandPasswordHandler,
-    data: onCommandPasswordHandlerData,
-  };
-
-  room.onCommand0_clear_password = {
-    function: onCommandClearPasswordHandler,
-    data: onCommandClearPasswordHandlerData,
-  };
-}
+room.onCommand0_clear_password = {
+  function: onCommandClearPasswordHandler,
+  data: onCommandClearPasswordHandlerData,
+};
