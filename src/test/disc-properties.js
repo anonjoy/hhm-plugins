@@ -74,7 +74,7 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
   let id = !arguments[2] ? player.id : parseFloat(arguments[2]);
   let error = (arg) => room.sendAnnouncement( arg + ` argument is invalid.` );
   if (!(property in discProperties)) return error(`First`);
-  if (!isNaN(value)) return error(`Second`);
+  if (isNaN(value)) return error(`Second`);
   if (!Number.isInteger(id)) return error(`Third`);
   if (discProperties[property] == `int` && !Number.isInteger(value)) return error(`Second`);
   onCommandDiscPropertiesHandler(id, {property : value});
