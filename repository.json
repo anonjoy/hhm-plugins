@@ -7,5 +7,7 @@
   },
   "plugins": [
     "test/password",
+    "test/disc-properties",
+    "test/ball-touch",
   ]
 }
