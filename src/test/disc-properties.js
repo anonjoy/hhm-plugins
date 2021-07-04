@@ -31,16 +31,55 @@ function updateDiscProperties () {
   }
 }
 
-function onCommandDiscPropertiesHandler ( player, properties ) {
-  if ( !playersDiscProperties[player.id] ) playersDiscProperties[player.id] = {};
+function onCommandDiscPropertiesHandler ( id, properties ) {
+  if ( !playersDiscProperties[id] ) playersDiscProperties[id] = {};
   for ( let [key, value] of Object.entries( properties ) ) {
-    playersDiscProperties[player.id][key] = value;
+    playersDiscProperties[id][key] = value;
   }
   let state;
   state = getGameState();
   if ( state == 1 || state == 2 ) {
-    room.setPlayerDiscProperties( player.id, properties );
+    room.setPlayerDiscProperties( id, properties );
   }
+}
+
+const onCommandDiscHandlerData = {
+  'sav/help': {
+    text: ` DISC_PROPERTY VALUE PLAYER_ID (OPTIONAL), to change the properties of a player's body (Change your body if you don't pass PLAYER_ID parameter)`,
+    roles: config.allowedRoles,
+  },
+};
+
+const discProperties = {
+  'x' : `float`,
+  'y' : `float`,
+  'xspeed' : `float`,
+  'yspeed' : `float`,
+  'xgravity' : `float`,
+  'ygravity' : `float`,
+  'radius' : `float`,
+  'bCoeff' : `float`,
+  'invMass' : `float`,
+  'damping' : `float`,
+  'color' : `int`,
+  'cMask' : `int`,
+  'cGroup' : `int`, 
+  
+};
+
+class Error {
+  sendAnnouncement
+}
+
+function onCommandDiscHandler ( player, arguments, argumentString ) {
+  let property = arguments[0];
+  let value = parseFloat(arguments[1]);
+  let id = parseFloat(arguments[2]);
+  if (!(property in discProperties)) return error;
+  if (!isNaN(value)) return error;
+  if (!Number.isInteger(id)) return error;
+  if (discProperties[property] == `int` && !Number.isInteger(value)) return error;
+  onCommandDiscPropertiesHandler(id, {property : argument});
 }
 
 const onCommandSizeHandlerData = {
@@ -57,10 +96,10 @@ function onCommandSizeHandler ( player, arguments, argumentString ) {
   
   if ( isNaN(argument) ) return;
   if ( argument >= config.defaultMinSize && argument <= config.defaultMaxSize ) {
-    onCommandDiscPropertiesHandler( player, { 'radius' : argument } );
+    onCommandDiscPropertiesHandler( player.id, { 'radius' : argument } );
   }
   else if ( roles.ensurePlayerRoles(player.id, config.allowedRoles, room, { 'message' : error }) ) {
-    onCommandDiscPropertiesHandler( player, { 'radius' : argument } );
+    onCommandDiscPropertiesHandler( player.id, { 'radius' : argument } );
   }
 }
 
@@ -84,6 +123,10 @@ function onPlayerTeamChangeHandler ( player ) {
 room.onCommand1_size = {
   function: onCommandSizeHandler,
   data: onCommandSizeHandlerData,
+};
+room.onCommand3_disc = {
+  function: onCommandDiscHandler,
+  data: onCommandDiscHandlerData,
 };
 room.onPlayerLeave = onPlayerLeaveHandler;
 room.onGameStart = onGameStartHandler;
