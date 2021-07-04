@@ -71,25 +71,30 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
   let properties = {};
   let property;
   let value;
+  let error = {
+    1 : (...args) => {return room.sendAnnouncement(`The argument ` + args[0] + ` is not a valid property of discs.`);},
+    2 : (...args) => {return room.sendAnnouncement(`The argument ` + args[0] + ` is not a valid value for the property ` + args[1] + `.`);},
+    3 : (...args) => {return room.sendAnnouncement(`The argument ` + args[0] + ` is not a valid ID.`);},
+  }
   for (let i = 0; i < arguments.length; i++++) {
     property = arguments[i];
     value = parseFloat(arguments[i+1]);
     if (!(property in discProperties)) {
-      // ... argument error
+      error[1](property);
       continue;
     }
     if (isNaN(value)) {
-      // ... argument error
+      error[2](property, value);
       continue;
     }
     if (discProperties[property] == `int` && !Number.isInteger(value)) {
-      // ... argument error
+      error[2](property, value);
       continue;
     }
     properties[property] = value;
   }
   let id = arguments.length % 2 != 0 ? arguments[arguments.length - 1] : player.id;
-  room.getPlayerList().some((player) => player.id == id) ? onCommandDiscPropertiesHandler(id, properties) : return; // return error
+  room.getPlayerList().some((player) => player.id == id) ? onCommandDiscPropertiesHandler(id, properties) : return error[3](id);
 }
 
 const onCommandSizeHandlerData = {
