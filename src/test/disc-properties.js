@@ -70,6 +70,7 @@ const onCommandDiscHandlerData = {
 function onCommandDiscHandler ( player, arguments, argumentString ) {
   let property = arguments[0];
   let value = parseFloat(arguments[1]);
+  console.log(arguments[2]);
   let id = !arguments[2] ? player.id : parseFloat(arguments[2]);
   let error = (arg) => room.sendAnnouncement( arg + ` argument is invalid.` );
   if (!(property in discProperties)) return error(`First`);
