@@ -68,7 +68,7 @@ const onCommandDiscHandlerData = {
 };
 
 function onCommandDiscHandler ( player, arguments, argumentString ) {
-  if (!arguments[0] || !arguments[1]) room.sendAnnouncement( `DISC_PROPERTY and VALUE are required parameters.` );
+  if (!arguments[0] || !arguments[1]) return room.sendAnnouncement( `DISC_PROPERTY and VALUE are required parameters.` );
   let property = arguments[0];
   let value = parseFloat(arguments[1]);
   let id = !arguments[2] ? player.id : parseFloat(arguments[2]);
