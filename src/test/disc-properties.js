@@ -67,18 +67,15 @@ const discProperties = {
   
 };
 
-class Error {
-  sendAnnouncement
-}
-
 function onCommandDiscHandler ( player, arguments, argumentString ) {
   let property = arguments[0];
   let value = parseFloat(arguments[1]);
   let id = parseFloat(arguments[2]);
-  if (!(property in discProperties)) return error;
-  if (!isNaN(value)) return error;
-  if (!Number.isInteger(id)) return error;
-  if (discProperties[property] == `int` && !Number.isInteger(value)) return error;
+  let error = (arg) => room.sendAnnouncement( arg + ` argument is invalid.` );
+  if (!(property in discProperties)) return error(`First`);
+  if (!isNaN(value)) return error(`Second`);
+  if (!Number.isInteger(id)) return error(`Third`);
+  if (discProperties[property] == `int` && !Number.isInteger(value)) return error(`Second`);
   onCommandDiscPropertiesHandler(id, {property : argument});
 }
 
