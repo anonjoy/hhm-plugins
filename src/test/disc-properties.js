@@ -23,6 +23,23 @@ const getGameState = room.getPlugin(`sav/game-state`).getGameState;
 
 const roles = room.getPlugin(`sav/roles`);
 
+const discProperties = {
+  'x' : `float`,
+  'y' : `float`,
+  'xspeed' : `float`,
+  'yspeed' : `float`,
+  'xgravity' : `float`,
+  'ygravity' : `float`,
+  'radius' : `float`,
+  'bCoeff' : `float`,
+  'invMass' : `float`,
+  'damping' : `float`,
+  'color' : `int`,
+  'cMask' : `int`,
+  'cGroup' : `int`, 
+  
+};
+
 let playersDiscProperties = {};
 
 function updateDiscProperties () {
@@ -50,27 +67,10 @@ const onCommandDiscHandlerData = {
   },
 };
 
-const discProperties = {
-  'x' : `float`,
-  'y' : `float`,
-  'xspeed' : `float`,
-  'yspeed' : `float`,
-  'xgravity' : `float`,
-  'ygravity' : `float`,
-  'radius' : `float`,
-  'bCoeff' : `float`,
-  'invMass' : `float`,
-  'damping' : `float`,
-  'color' : `int`,
-  'cMask' : `int`,
-  'cGroup' : `int`, 
-  
-};
-
 function onCommandDiscHandler ( player, arguments, argumentString ) {
   let property = arguments[0];
   let value = parseFloat(arguments[1]);
-  let id = parseFloat(arguments[2]);
+  let id = !arguments[2] ? player.id : parseFloat(arguments[2]);
   let error = (arg) => room.sendAnnouncement( arg + ` argument is invalid.` );
   if (!(property in discProperties)) return error(`First`);
   if (!isNaN(value)) return error(`Second`);
