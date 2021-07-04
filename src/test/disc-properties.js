@@ -77,7 +77,7 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
   if (!isNaN(value)) return error(`Second`);
   if (!Number.isInteger(id)) return error(`Third`);
   if (discProperties[property] == `int` && !Number.isInteger(value)) return error(`Second`);
-  onCommandDiscPropertiesHandler(id, {property : argument});
+  onCommandDiscPropertiesHandler(id, {property : value});
 }
 
 const onCommandSizeHandlerData = {
