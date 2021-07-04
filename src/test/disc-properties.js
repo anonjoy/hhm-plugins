@@ -68,9 +68,9 @@ const onCommandDiscHandlerData = {
 };
 
 function onCommandDiscHandler ( player, arguments, argumentString ) {
+  if (!arguments[0] || !arguments[1]) room.sendAnnouncement( `DISC_PROPERTY and VALUE are required parameters.` );
   let property = arguments[0];
   let value = parseFloat(arguments[1]);
-  console.log(arguments[2]);
   let id = !arguments[2] ? player.id : parseFloat(arguments[2]);
   let error = (arg) => room.sendAnnouncement( arg + ` argument is invalid.` );
   if (!(property in discProperties)) return error(`First`);
@@ -122,7 +122,7 @@ room.onCommand1_size = {
   function: onCommandSizeHandler,
   data: onCommandSizeHandlerData,
 };
-room.onCommand3_disc = {
+room.onCommand_disc = {
   function: onCommandDiscHandler,
   data: onCommandDiscHandlerData,
 };
