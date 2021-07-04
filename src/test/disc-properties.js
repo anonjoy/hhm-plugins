@@ -62,24 +62,34 @@ function onCommandDiscPropertiesHandler ( id, properties ) {
 
 const onCommandDiscHandlerData = {
   'sav/help': {
-    text: ` DISC_PROPERTY VALUE PLAYER_ID (OPTIONAL), to change the properties of a player's body (Change your body if you don't pass PLAYER_ID parameter)`,
+    text: ` [DISC_PROPERTY VALUE] PLAYER_ID (OPTIONAL), to change the properties of a player's body (Change your body if you don't pass PLAYER_ID parameter)`,
     roles: config.allowedRoles,
   },
 };
 
 function onCommandDiscHandler ( player, arguments, argumentString ) {
-  if (!arguments[0] || !arguments[1]) return room.sendAnnouncement( `DISC_PROPERTY and VALUE are required parameters.` );
-  let property = arguments[0];
-  let value = parseFloat(arguments[1]);
-  let id = !arguments[2] ? player.id : parseFloat(arguments[2]);
-  let error = (arg) => room.sendAnnouncement( arg + ` argument is invalid.` );
-  if (!(property in discProperties)) return error(`First`);
-  if (isNaN(value)) return error(`Second`);
-  if (!Number.isInteger(id)) return error(`Third`);
-  if (discProperties[property] == `int` && !Number.isInteger(value)) return error(`Second`);
   let properties = {};
-  properties[property] = value; 
-  onCommandDiscPropertiesHandler(id, properties);
+  let property;
+  let value;
+  for (let i = 0; i < arguments.length; i++++) {
+    property = arguments[i];
+    value = parseFloat(arguments[i+1]);
+    if (!(property in discProperties)) {
+      // ... argument error
+      continue;
+    }
+    if (isNaN(value)) {
+      // ... argument error
+      continue;
+    }
+    if (discProperties[property] == `int` && !Number.isInteger(value)) {
+      // ... argument error
+      continue;
+    }
+    properties[property] = value;
+  }
+  let id = arguments.length % 2 != 0 ? arguments[arguments.length - 1] : player.id;
+  room.getPlayerList().some((player) => player.id == id) ? onCommandDiscPropertiesHandler(id, properties) : return; // return error
 }
 
 const onCommandSizeHandlerData = {
