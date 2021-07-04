@@ -29,8 +29,6 @@ room.pluginSpec = {
 
 const config = room.getConfig();
 
-const roles = room.getPlugin(`sav/roles`);
-
 const onCommandPasswordHandlerData = {
   'sav/help': {
     text: ` PASSWORD, to put a password in the room.`,
@@ -61,12 +59,16 @@ function onCommandClearPasswordHandler ( player ) {
   }
 }
 
-room.onCommand1_password = {
-  function: onCommandPasswordHandler,
-  data: onCommandPasswordHandlerData,
-};
 
-room.onCommand0_clear_password = {
-  function: onCommandClearPasswordHandler,
-  data: onCommandClearPasswordHandlerData,
-};
+room.onRoomLink = function onRoomLink() {
+  const roles = room.getPlugin(`sav/roles`);
+  room.onCommand1_password = {
+    function: onCommandPasswordHandler,
+    data: onCommandPasswordHandlerData,
+  };
+
+  room.onCommand0_clear_password = {
+    function: onCommandClearPasswordHandler,
+    data: onCommandClearPasswordHandlerData,
+  };
+}
