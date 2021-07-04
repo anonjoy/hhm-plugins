@@ -84,6 +84,7 @@ HHM.config.plugins = {
   'sav/core': {},
   'sav/plugin-control': {},
   'test/password': {},
+  'test/disc-properties': {},
 };
 
 /**
