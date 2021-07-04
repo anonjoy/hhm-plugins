@@ -29,6 +29,8 @@ room.pluginSpec = {
 
 const config = room.getConfig();
 
+const roles = room.getPlugin(`sav/roles`);
+
 const onCommandPasswordHandlerData = {
   'sav/help': {
     text: ` PASSWORD, to put a password in the room.`,
