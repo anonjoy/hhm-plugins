@@ -1,5 +1,5 @@
 /*
-  
+
   Comandos: 
   - !password
   - !clear password
@@ -7,6 +7,7 @@
   Nota:
   '!help password' o '!help clear password' solo mostrara la descripción del comando a aquellos roles que tengan permitido usarlos.
   Tampoco podran verlos en la lista '!help' si no tienen el rol para usarlo.
+  Más información en: https://github.com/saviola777/hhm-plugins/blob/master/src/sav/help.js
   
 */
 
