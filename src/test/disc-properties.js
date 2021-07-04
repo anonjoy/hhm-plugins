@@ -75,8 +75,8 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
     1 : (...args) => {return room.sendAnnouncement(`The argument ` + args[0] + ` is not a valid property of discs.`);},
     2 : (...args) => {return room.sendAnnouncement(`The argument ` + args[0] + ` is not a valid value for the property ` + args[1] + `.`);},
     3 : (...args) => {return room.sendAnnouncement(`The argument ` + args[0] + ` is not a valid ID.`);},
-  }
-  for (let i = 0; i < arguments.length; i++++) {
+  };
+  for (let i = 0; i < arguments.length; i+=2) {
     property = arguments[i];
     value = parseFloat(arguments[i+1]);
     if (!(property in discProperties)) {
