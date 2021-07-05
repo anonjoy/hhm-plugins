@@ -10,7 +10,7 @@ room.pluginSpec = {
     defaultMaxSize : 17,
     defaultMinSize : 12,
     format : {
-      error : { prefix: `PM`,style: `italic`, sound: 1, color: 0xFF0000, style: `bold` },
+      error : { prefix: ``,style: `italic`, sound: 1, color: 0xFF0000 },
     },
   },
   dependencies: [
