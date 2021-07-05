@@ -28,7 +28,9 @@ class Catalog {}
 class Match {
   constructor(){
     /* * VARIBABLES * */
-    let DEFAULT_PLAYER_DISC_PROPERTIES;
+    const DEFAULT_STADIUMS                = [`Classic`, `Easy`, `Small`, `Big`, `Rounded`, `Hockey`, `Big Hockey`, `Big Easy`, `Big Rounded`, `Huge`];
+    const DEFAULT_PLAYER_DISC_PROPERTIES  = {`radius` : 15, `bCoeff` : 0.5, `invMass` : 0.5, `damping` : 0.96};
+    let PLAYER_DISC_PROPERTIES;
     let STATE;
     let MAP_ID;
     let MAP_NAME;
@@ -48,15 +50,23 @@ class Match {
     }
     this.getMap = () => MAP_ID;
     this.savePlayerDiscProperties = function({radius,bCoeff,invMass,damping,...rest}){
-      DEFAULT_PLAYER_DISC_PROPERTIES = {radius,bCoeff,invMass,damping};
+      PLAYER_DISC_PROPERTIES = {radius,bCoeff,invMass,damping};
     }
-    this.getPlayerDiscProperties = () => DEFAULT_PLAYER_DISC_PROPERTIES;
+    this.getPlayerDiscProperties = () => PLAYER_DISC_PROPERTIES;
     this.savePlayerDiscProperties = function(){
     }
     /* * * EVENTOS * * */
+    this.onGameStart = function(){
+      if(!PLAYER_DISC_PROPERTIES) {
+        if(MAP_WAS_SETTED)  CM.savePlayerDiscProperties(CA[MAP_ID].getCode().playerPhysics);
+        else                waitingForPlayers();
+      }
+    }
     this.onGameStateChanged = (newState, ...args) => STATE = newState;
     this.onStadiumChange = function(newStadiumName, byPlayer){
       MAP_NAME = newStadiumName;
+      if(DEFAULT_STADIUMS.includes(MAP_NAME)) PLAYER_DISC_PROPERTIES = DEFAULT_PLAYER_DISC_PROPERTIES;
+      else                                    PLAYER_DISC_PROPERTIES = null;
       if(byPlayer)  MAP_WAS_SETTED = true;
       else          MAP_WAS_SETTED = false; MAP_ID = null;
     }
