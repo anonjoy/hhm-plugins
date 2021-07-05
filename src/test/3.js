@@ -1,3 +1,24 @@
+/*
+
+var object = {
+    1: [2,5,"hi"],
+    hi: {hihi: 1}
+};
+
+console.log(object);
+
+var strobj = JSON.stringify(object);
+
+console.log(strobj); // es un string ahora
+
+var unstrobj = JSON.parse(strobj);
+
+console.log(unstrobj); // vuelve a ser un objeto
+
+*/
+
+
+
 neededPlayers = {red: 0, blue: 0}
 
 let unObjeto = {
