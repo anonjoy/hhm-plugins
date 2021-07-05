@@ -9,6 +9,9 @@ room.pluginSpec = {
     allowedRoles : ['host'],
     defaultMaxSize : 17,
     defaultMinSize : 12,
+    format : {
+      error : { prefix: `PM`,style: `italic`, sound: 1, color: 0xFF0000, style: `bold` },
+    },
   },
   dependencies: [
     `sav/game-state`,
@@ -68,15 +71,15 @@ const onCommandDiscHandlerData = {
 };
 
 const error = {
-  1 : (property) => {room.sendAnnouncement(`The argument ` + property + ` is not a valid property of discs.`);},
-  2 : (property) => {room.sendAnnouncement(`The VALUE argument of the property ` + property + ` is not a valid value.`);},
-  3 : (id) => {room.sendAnnouncement(`The argument ` + id + ` is not a valid ID.`);},
-  4 : () => {room.sendAnnouncement(`DISC_PROPERTY and VALUE parameters are necessary.`);},
-  5 : () => {room.sendAnnouncement(`The argument must be a number between ` + config.defaultMinSize + ` and ` + config.defaultMaxSize + `.`)}
+  1 : (id, property) => {room.sendAnnouncement(`The argument ` + property + ` is not a valid property of discs.`, id, config.format.error);},
+  2 : (id, property) => {room.sendAnnouncement(`The VALUE argument of the property ` + property + ` is not a valid value.`, id, config.format.error);},
+  3 : (id, argID) => {room.sendAnnouncement(`The argument ` + argID + ` is not a valid ID.`, id, config.format.error);},
+  4 : (id, ) => {room.sendAnnouncement(`DISC_PROPERTY and VALUE parameters are necessary.`, id, config.format.error);},
+  5 : (id, ) => {room.sendAnnouncement(`The argument must be a number between ` + config.defaultMinSize + ` and ` + config.defaultMaxSize + `.`, id, config.format.error)}
 };
 
 function onCommandDiscHandler ( player, arguments, argumentString ) {
-  if (!arguments[0] || !arguments[1]) return error[4]();
+  if (!arguments[0] || !arguments[1]) return error[4](player.id);
   let properties = {};
   let property;
   let value;
@@ -85,21 +88,21 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
     property = arguments[i];
     value = parseFloat(arguments[i+1]);
     if (!(property in discProperties)) {
-      error[1](property);
+      error[1](player.id, property);
       continue;
     }
     if (isNaN(value)) {
-      error[2](property);
+      error[2](player.id, property);
       continue;
     }
     if (discProperties[property] == `int` && !Number.isInteger(value)) {
-      error[2](property);
+      error[2](player.id, property);
       continue;
     }
     properties[property] = value;
   }
   let id = arguments.length % 2 != 0 ? arguments[arguments.length - 1] : player.id;
-  !isNaN(id) && room.getPlayerList().some((player) => player.id == id) ? onCommandDiscPropertiesHandler(id, properties) : error[3](id);
+  !isNaN(id) && room.getPlayerList().some((player) => player.id == id) ? onCommandDiscPropertiesHandler(id, properties) : error[3](player.id, id);
   return false;
 }
 
@@ -115,7 +118,7 @@ function onCommandSizeHandler ( player, arguments, argumentString ) {
   let argument = parseInt(arguments[0]);
   player.roles = roles.getPlayerRoles(player.id);
   
-  if ( isNaN(argument) ) error[5]();
+  if ( isNaN(argument) ) error[5](player.id);
   else if ( argument >= config.defaultMinSize && argument <= config.defaultMaxSize ) {
     onCommandDiscPropertiesHandler( player.id, { 'radius' : argument } );
   }
@@ -136,7 +139,7 @@ function onCommandDiscResetHandler ( player, arguments, argumentString ) {
   let argument = arguments[0];
   if (!argument && playersDiscProperties[player.id]) delete playersDiscProperties[player.id];
   else if ( isNaN(argument) && argument == 'all' ) playersDiscProperties = {};
-  else !isNaN(argument) && room.getPlayerList().some((player) => player.id == argument) ? delete playersDiscProperties[argument] : error[3](argument);
+  else !isNaN(argument) && room.getPlayerList().some((player) => player.id == argument) ? delete playersDiscProperties[argument] : error[3](player.id, argument);
   return false;
 }
 
