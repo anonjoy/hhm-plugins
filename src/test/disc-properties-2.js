@@ -35,6 +35,7 @@ class Match {
     let MAP_ID;
     let MAP_NAME;
     let MAP_WAS_SETTED;
+    let WAITING_FOR_PLAYERS;
     /* * * METODOS * * */
     this.setMap = function(index, force = false){
       if(!force){
@@ -56,19 +57,26 @@ class Match {
     this.savePlayerDiscProperties = function(){
     }
     /* * * EVENTOS * * */
-    this.onGameStart = function(){
-      if(!PLAYER_DISC_PROPERTIES) {
-        if(MAP_WAS_SETTED)  CM.savePlayerDiscProperties(CA[MAP_ID].getCode().playerPhysics);
-        else                waitingForPlayers();
+    this.onPlayerTeamChange = function(changedPlayer, byPlayer){
+      if(WAITING_FOR_PLAYERS){ 
+        CM.savePlayerDiscProperties(room.getPlayerDiscProperties(changedPlayer.id)); 
+        WAITING_FOR_PLAYERS = false;
       }
     }
     this.onGameStateChanged = (newState, ...args) => STATE = newState;
     this.onStadiumChange = function(newStadiumName, byPlayer){
       MAP_NAME = newStadiumName;
-      if(DEFAULT_STADIUMS.includes(MAP_NAME)) PLAYER_DISC_PROPERTIES = DEFAULT_PLAYER_DISC_PROPERTIES;
-      else                                    PLAYER_DISC_PROPERTIES = null;
       if(byPlayer)  MAP_WAS_SETTED = true;
-      else          MAP_WAS_SETTED = false; MAP_ID = null;
+      else{         
+                    MAP_WAS_SETTED = false; 
+                    MAP_ID = null;
+      }
+      if(DEFAULT_STADIUMS.includes(MAP_NAME)) PLAYER_DISC_PROPERTIES = DEFAULT_PLAYER_DISC_PROPERTIES;
+      else if(MAP_WAS_SETTED)                 CM.savePlayerDiscProperties(CA[MAP_ID].getCode().playerPhysics);
+      else{
+                                              PLAYER_DISC_PROPERTIES = null;
+                                              WAITING_FOR_PLAYERS = true;
+      }
     }
   }
 }
