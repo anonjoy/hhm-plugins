@@ -100,6 +100,7 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
   }
   let id = arguments.length % 2 != 0 ? arguments[arguments.length - 1] : player.id;
   !isNaN(id) && room.getPlayerList().some((player) => player.id == id) ? onCommandDiscPropertiesHandler(id, properties) : error[3](id);
+  return false;
 }
 
 const onCommandSizeHandlerData = {
