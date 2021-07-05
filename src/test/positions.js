@@ -78,8 +78,8 @@ function onSetMapHandler(id, enabled, amount) {
 
 let currentMap = {};
 
-function onStadiumChangeHandler(name, player) {
-  if (!player) {
+function onStadiumChangeHandler(newStadiumName, byPlayer) { // cuando el host pone el mapa el parametro 'byPlayer' devuelve 'null'
+  if (!byPlayer) {
     currentMap.wasSetted = false;
     currentMap.enabledPositions = false;
     currentMap.playersPerTeam = false;
