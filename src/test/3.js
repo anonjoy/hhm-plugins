@@ -10,6 +10,7 @@ console.log(object);
 var strobj = JSON.stringify(object);
 
 console.log(strobj); // es un string ahora
+// output -> {"1":[2,5,"hi"],"hi":{"hihi":1}}
 
 var unstrobj = JSON.parse(strobj);
 
@@ -55,6 +56,7 @@ class Mapa {
   
 }
 
+/*
 
 const positions = {
     2 : ["cp", "of"], // cp = capitan, of = ofensivo
@@ -65,15 +67,28 @@ const positions = {
     7 : ["gk", "ld", "li", "mc", "ei", "ed", "dc"] // ei = extremo izquierdo
 }
 
+function onCommandPositionHandler(player) {
+}
+
+room.onCommand0_cp = onCommandPositionHandler;
+room.onCommand0_gk = onCommandPositionHandler;
+room.onCommand0_df = onCommandPositionHandler;
+room.onCommand0_li = onCommandPositionHandler;
+room.onCommand0_ld = onCommandPositionHandler;
+room.onCommand0_mc = onCommandPositionHandler;
+room.onCommand0_of = onCommandPositionHandler;
+room.onCommand0_ei = onCommandPositionHandler;
+room.onCommand0_ex = onCommandPositionHandler;
+room.onCommand0_ed = onCommandPositionHandler;
+room.onCommand0_dc = onCommandPositionHandler;
+
+let catalog = [];
+
 class Map {
   constructor (index, code, numberOfPositions = false ) {
     this.index = index;
     this.code = JSON.parse(code);
     this.numberOfPositions = numberOfPositions;
-    this.positions = {
-      1 : this.getPos(), // Red Team
-      2 : this.getPos(), // Blue Team
-    };
   }
     
   getName() {
@@ -87,19 +102,11 @@ class Map {
   hasPositions() {
       return this.numberOfPositions ? true : false;
   }
-  
-  getPos(){
-    let arr = []
-    for (let i = 0; i < this.playersPerTeam; i++){
-      arr.push(-1);
-    }
-    return arr
-  }
 }
 
 
 
-
+*/
 
 
 let positions = {
