@@ -33,14 +33,26 @@ const positions = {
     7 : ["gk", "ld", "li", "mc", "ei", "ed", "dc"] // ei = extremo izquierdo
 }
 
-let catalog = [];
+const catalog = [];
+
+class Catalog {
+  this.addMap = function(code){
+  }
+}
 
 class Map {
   constructor (index, code, numberOfPositions = false ) {
     this.index = index;
     this.code = JSON.parse(code);
     this.numberOfPositions = numberOfPositions;
+    this.hasPositions = function(){
+      return this.numberOfPositions ? true : false;
+    }
     this.enabledPositions = this.hasPositions();
+    this.getName = function(){
+      return this.code.name;
+    }
+    
   }
     
   getName() {
