@@ -75,7 +75,7 @@ const error = {
 };
 
 function onCommandDiscHandler ( player, arguments, argumentString ) {
-  if (!arguments[0] || !arguments[1]) error[4]();
+  if (!arguments[0] || !arguments[1]) return error[4]();
   let properties = {};
   let property;
   let value;
@@ -97,7 +97,7 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
     properties[property] = value;
   }
   let id = arguments.length % 2 != 0 ? arguments[arguments.length - 1] : player.id;
-  room.getPlayerList().some((player) => player.id == id) ? onCommandDiscPropertiesHandler(id, properties) : error[3](id);
+  !isNaN(id) && room.getPlayerList().some((player) => player.id == id) ? onCommandDiscPropertiesHandler(id, properties) : error[3](id);
 }
 
 const onCommandSizeHandlerData = {
@@ -121,8 +121,22 @@ function onCommandSizeHandler ( player, arguments, argumentString ) {
   }
 }
 
+const onCommandDiscResetHandlerData = {
+  'sav/help': {
+    text: ` PLAYER_ID/all (OPTIONAL), to reset the properties of player's body. (Reset your properties if you don't pass any parameter)`,
+    roles: config.allowedRoles,
+  },
+};
+
+function onCommandDiscResetHandler ( player, arguments, argumentString ) {
+  let argument = arguments[0];
+  if (!argument && playersDiscProperties[player.id]) delete playersDiscProperties[player.id];
+  else if ( isNaN(argument) && argument == 'all' ) playersDiscProperties = {};
+  else !isNaN(argument) && room.getPlayerList().some((player) => player.id == argument) ? onCommandDiscPropertiesHandler(id, properties) : error[3](id);
+}
+
 function onPlayerLeaveHandler ( player ) {
-  playersDiscProperties[player.id] ? (delete playersDiscProperties[player.id]) : false;
+  if (playersDiscProperties[player.id]) delete playersDiscProperties[player.id];
 }
 
 function onGameStartHandler () {
@@ -145,6 +159,10 @@ room.onCommand1_size = {
 room.onCommand_disc = {
   function: onCommandDiscHandler,
   data: onCommandDiscHandlerData,
+};
+room.onCommand_disc_reset = {
+  function: onCommandDiscResetHandler,
+  data: onCommandDiscResetHandlerData,
 };
 room.onPlayerLeave = onPlayerLeaveHandler;
 room.onGameStart = onGameStartHandler;
