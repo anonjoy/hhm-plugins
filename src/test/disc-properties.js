@@ -79,7 +79,8 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
   let properties = {};
   let property;
   let value;
-  for (let i = 0; i < arguments.length; i+=2) {
+  let length = arguments.length % 2 != 0 ? arguments.length - 1 : arguments.length;
+  for (let i = 0; i < length; i+=2) {
     property = arguments[i];
     value = parseFloat(arguments[i+1]);
     if (!(property in discProperties)) {
@@ -132,7 +133,7 @@ function onCommandDiscResetHandler ( player, arguments, argumentString ) {
   let argument = arguments[0];
   if (!argument && playersDiscProperties[player.id]) delete playersDiscProperties[player.id];
   else if ( isNaN(argument) && argument == 'all' ) playersDiscProperties = {};
-  else !isNaN(argument) && room.getPlayerList().some((player) => player.id == argument) ? onCommandDiscPropertiesHandler(id, properties) : error[3](id);
+  else !isNaN(argument) && room.getPlayerList().some((player) => player.id == argument) ? delete playersDiscProperties[argument] : error[3](id);
 }
 
 function onPlayerLeaveHandler ( player ) {
