@@ -69,7 +69,7 @@ const onCommandDiscHandlerData = {
 
 const error = {
   1 : (property) => {room.sendAnnouncement(`The argument ` + property + ` is not a valid property of discs.`);},
-  2 : (property, value) => {room.sendAnnouncement(`The argument ` + value + ` is not a valid value for the property ` + property + `.`);},
+  2 : (property) => {room.sendAnnouncement(`The VALUE argument of the property ` + property + ` is not a valid value.`);},
   3 : (id) => {room.sendAnnouncement(`The argument ` + id + ` is not a valid ID.`);},
   4 : () => {room.sendAnnouncement(`DISC_PROPERTY and VALUE parameters are necessary.`);},
 };
@@ -87,11 +87,11 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
       continue;
     }
     if (isNaN(value)) {
-      error[2](property, value);
+      error[2](property);
       continue;
     }
     if (discProperties[property] == `int` && !Number.isInteger(value)) {
-      error[2](property, value);
+      error[2](property);
       continue;
     }
     properties[property] = value;
