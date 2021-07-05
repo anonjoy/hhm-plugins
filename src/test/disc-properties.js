@@ -74,8 +74,8 @@ const error = {
   1 : (id, property) => {room.sendAnnouncement(`The argument ` + property + ` is not a valid property of discs.`, id, config.format.error);},
   2 : (id, property) => {room.sendAnnouncement(`The VALUE argument of the property ` + property + ` is not a valid value.`, id, config.format.error);},
   3 : (id, argID) => {room.sendAnnouncement(`The argument ` + argID + ` is not a valid ID.`, id, config.format.error);},
-  4 : (id, ) => {room.sendAnnouncement(`DISC_PROPERTY and VALUE parameters are necessary.`, id, config.format.error);},
-  5 : (id, ) => {room.sendAnnouncement(`The argument must be a number between ` + config.defaultMinSize + ` and ` + config.defaultMaxSize + `.`, id, config.format.error)}
+  4 : (id) => {room.sendAnnouncement(`DISC_PROPERTY and VALUE parameters are necessary.`, id, config.format.error);},
+  5 : (id) => {room.sendAnnouncement(`The argument must be a number between ` + config.defaultMinSize + ` and ` + config.defaultMaxSize + `.`, id, config.format.error);},
 };
 
 function onCommandDiscHandler ( player, arguments, argumentString ) {
