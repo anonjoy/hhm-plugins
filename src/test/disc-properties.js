@@ -122,7 +122,7 @@ function onCommandSizeHandler ( player, arguments, argumentString ) {
   else if ( argument >= config.defaultMinSize && argument <= config.defaultMaxSize ) {
     onCommandDiscPropertiesHandler( player.id, { 'radius' : argument } );
   }
-  else ( config.allowedRoles.some((role) => player.roles.includes(role)) ) {
+  else if ( config.allowedRoles.some((role) => player.roles.includes(role)) ) {
     onCommandDiscPropertiesHandler( player.id, { 'radius' : argument } );
   }
   return false;
