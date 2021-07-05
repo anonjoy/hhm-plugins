@@ -133,7 +133,7 @@ function onCommandDiscResetHandler ( player, arguments, argumentString ) {
   let argument = arguments[0];
   if (!argument && playersDiscProperties[player.id]) delete playersDiscProperties[player.id];
   else if ( isNaN(argument) && argument == 'all' ) playersDiscProperties = {};
-  else !isNaN(argument) && room.getPlayerList().some((player) => player.id == argument) ? delete playersDiscProperties[argument] : error[3](id);
+  else !isNaN(argument) && room.getPlayerList().some((player) => player.id == argument) ? delete playersDiscProperties[argument] : error[3](argument);
 }
 
 function onPlayerLeaveHandler ( player ) {
