@@ -9,6 +9,7 @@ room.pluginSpec = {
     allowedRoles : ['host'],
     defaultMaxSize : 17,
     defaultMinSize : 12,
+    updateExceptions : ['x','y','xspeed','yspeed'],
     format : {
       error : { prefix: ``,style: `italic`, sound: 1, color: 0xFF0000 },
     },
@@ -54,7 +55,7 @@ function updateDiscProperties () {
 function onCommandDiscPropertiesHandler ( id, properties ) {
   if ( !playersDiscProperties[id] ) playersDiscProperties[id] = {};
   for ( let [key, value] of Object.entries( properties ) ) {
-    playersDiscProperties[id][key] = value;
+    if (!config.updateExceptions.includes(key)) playersDiscProperties[id][key] = value;
   }
   let state;
   state = getGameState();
