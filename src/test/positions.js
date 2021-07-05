@@ -11,6 +11,19 @@ room.pluginSpec = {
   },
 };
 
+let currentMatch = {
+  map : {
+    id : null,
+    wasSetted : false,
+    enabledPositions : false,
+    playerPerTeam : false,
+  },
+  positions : {
+    1 : [], // Red
+    2 : [], // Blue
+  },
+};
+
 const positions = {
     2 : ["cp", "of"], // cp = capitan, of = ofensivo
     3 : ["gk", "cp", "of"],
@@ -20,22 +33,6 @@ const positions = {
     7 : ["gk", "ld", "li", "mc", "ei", "ed", "dc"] // ei = extremo izquierdo
 }
 
-function onPlayerChatHandler(player, argument) {
-  if
-}
-
-room.onCommand0_cp = onCommandPositionHandler;
-room.onCommand0_gk = onCommandPositionHandler;
-room.onCommand0_df = onCommandPositionHandler;
-room.onCommand0_li = onCommandPositionHandler;
-room.onCommand0_ld = onCommandPositionHandler;
-room.onCommand0_mc = onCommandPositionHandler;
-room.onCommand0_of = onCommandPositionHandler;
-room.onCommand0_ei = onCommandPositionHandler;
-room.onCommand0_ex = onCommandPositionHandler;
-room.onCommand0_ed = onCommandPositionHandler;
-room.onCommand0_dc = onCommandPositionHandler;
-
 let catalog = [];
 
 class Map {
@@ -43,6 +40,7 @@ class Map {
     this.index = index;
     this.code = JSON.parse(code);
     this.numberOfPositions = numberOfPositions;
+    this.enabledPositions = this.hasPositions();
   }
     
   getName() {
@@ -57,11 +55,57 @@ class Map {
       return this.numberOfPositions ? true : false;
   }
   
-  setMap() {
-    let state = room.getPlugin(`sav/game-state`);
-    if (!state) return; //error
-    if (state != 0) return;// error
+  setMap(force) {
+    if (!force) {
+      let state = room.getPlugin(`sav/game-state`);
+      if (!state) return 1; //error
+      if (state != 0) return 2;// error
+    }
+    else room.stopGame();
     room.setCustomStadium(this.getMap());
-    
+    room.triggerEvent("onSetMap", this.id, this.enabledPositions, this.numberOfPositions);
   }
 }
+
+function onSetMapHandler(id, enabled, amount) {
+  currentMap.id = id;
+  currentMap.wasSetted = true;
+  if (!enabled || !amount) return;
+  currentMap.enabledPositions = true;
+  currentMap.playersPerTeam = amount;
+  currentMap.positions = [];
+}
+
+let currentMap = {};
+
+function onStadiumChangeHandler(name, player) {
+  if (!player) {
+    currentMap.wasSetted = false;
+    currentMap.enabledPositions = false;
+    currentMap.playersPerTeam = false;
+  }
+}
+
+function checkPositions() {
+  let remaining = currentMap.positions.filter((pos) => !pos);
+  if (remaining.length == 0) room.pauseGame(false);
+}
+
+function onPlayerChatHandler(player, pos) {
+  if (!currentMap.wasSetted || !currentMap.enabledPositions) return;
+  let index = positions[currentMap.playersPerTeam].indexOf(pos);
+  if (index != -1) {
+    currentMap.positions[index] = player.id;
+    // El jugador tomó la posición 'positions[currentMap.playersPerTeam][pos]'
+    checkPositions();
+  }
+}
+
+function onGameStartHandler() {
+  if (currentMap.wasSetted && currentMap.enabledPositions) room.pauseGame(true);
+}
+
+room.onSetMap = onSetMapHandler;
+room.onPlayerChat = onPlayerChatHandler;
+room.onGameStart = onGameStartHandler;
+room.onStadiumChange = onStadiumChangeHandler;
