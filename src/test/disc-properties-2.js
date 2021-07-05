@@ -23,24 +23,48 @@ function filterDefaultPlayerDiscProperties({radius,bCoeff,invMass,damping,...res
   return {radius,bCoeff,invMass,damping};
 }
 
+class Catalog {}
+
 class Match {
   constructor(){
+    /* * VARIBABLES * */
     let DEFAULT_PLAYER_DISC_PROPERTIES;
-    let MAP;
-    this.setMap = function(){
+    let STATE;
+    let MAP_ID;
+    let MAP_NAME;
+    let MAP_WAS_SETTED;
+    /* * * METODOS * * */
+    this.setMap = function(index, force = false){
+      if(!force){
+          switch(STATE){
+            case 0: break; // GAME STOPPED
+            case 1: case 2: return 1; // ERROR: GAME IS STARTED OR PAUSED
+            default : return 2; // ERROR: PLUGIN NOT LOADED
+          }
+      }
+      else room.stopGame();
+      MAP_ID = index;
+      room.setCustomStadium(CA[index].getStringCode);
     }
-    this.getMap = function(){
-    }
+    this.getMap = () => MAP_ID;
     this.savePlayerDiscProperties = function({radius,bCoeff,invMass,damping,...rest}){
       DEFAULT_PLAYER_DISC_PROPERTIES = {radius,bCoeff,invMass,damping};
     }
     this.getPlayerDiscProperties = () => DEFAULT_PLAYER_DISC_PROPERTIES;
     this.savePlayerDiscProperties = function(){
     }
+    /* * * EVENTOS * * */
+    this.onGameStateChanged = (newState, ...args) => STATE = newState;
+    this.onStadiumChange = function(newStadiumName, byPlayer){
+      MAP_NAME = newStadiumName;
+      if(byPlayer)  MAP_WAS_SETTED = true;
+      else          MAP_WAS_SETTED = false; MAP_ID = null;
+    }
   }
 }
 
 const CM = new Match(); // Current Match
+const CA = new Catalog(); // Catalog
 
 
 function savePlayerDiscProperties(){
