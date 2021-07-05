@@ -56,6 +56,48 @@ class Mapa {
 }
 
 
+const positions = {
+    2 : ["cp", "of"], // cp = capitan, of = ofensivo
+    3 : ["gk", "cp", "of"],
+    4 : ["gk", "df", "of", "cp"], // df= defensor
+    5 : ["gk", "df", "mc", "of", "cp"], // mc = mediocampista
+    6 : ["gk", "ld", "li", "mc", "dc", "ex"], // ex = extremo li = lat izq
+    7 : ["gk", "ld", "li", "mc", "ei", "ed", "dc"] // ei = extremo izquierdo
+}
+
+class Map {
+  constructor (index, code, numberOfPositions = false ) {
+    this.index = index;
+    this.code = JSON.parse(code);
+    this.numberOfPositions = numberOfPositions;
+    this.positions = {
+      1 : this.getPos(), // Red Team
+      2 : this.getPos(), // Blue Team
+    };
+  }
+    
+  getName() {
+      return this.code.name;
+  }
+    
+  getMap() {
+      return JSON.stringify(this.code);
+  }
+    
+  hasPositions() {
+      return this.numberOfPositions ? true : false;
+  }
+  
+  getPos(){
+    let arr = []
+    for (let i = 0; i < this.playersPerTeam; i++){
+      arr.push(-1);
+    }
+    return arr
+  }
+}
+
+
 
 
 
