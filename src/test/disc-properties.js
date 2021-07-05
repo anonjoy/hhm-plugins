@@ -125,6 +125,7 @@ function onCommandSizeHandler ( player, arguments, argumentString ) {
   else if ( config.allowedRoles.some((role) => player.roles.includes(role)) ) {
     onCommandDiscPropertiesHandler( player.id, { 'radius' : argument } );
   }
+  else error[5](player.id);
   return false;
 }
 
