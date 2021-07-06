@@ -29,7 +29,7 @@ class Match {
   constructor(){
     /* * VARIBABLES * */
     const DEFAULT_STADIUMS                = [`Classic`, `Easy`, `Small`, `Big`, `Rounded`, `Hockey`, `Big Hockey`, `Big Easy`, `Big Rounded`, `Huge`];
-    const DEFAULT_PLAYER_DISC_PROPERTIES  = {`radius` : 15, `bCoeff` : 0.5, `invMass` : 0.5, `damping` : 0.96};
+    const DEFAULT_PLAYER_DISC_PROPERTIES  = { `radius` : 15, `bCoeff` : 0.5, `invMass` : 0.5, `damping` : 0.96 };
     let PLAYER_DISC_PROPERTIES;
     let STATE;
     let MAP_ID;
