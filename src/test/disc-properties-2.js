@@ -57,7 +57,17 @@ class Match {
       PLAYER_DISC_PROPERTIES = {radius,bCoeff,invMass,damping};
     }
     this.getPlayerDiscProperties = () => PLAYER_DISC_PROPERTIES;
+    this.saveBallProperties = function({radius,bCoeff,invMass,damping,...rest}){
+      BALL_PROPERTIES = {radius,bCoeff,invMass,damping};
+    }
+    this.getBallProperties = () => BALL_PROPERTIES;
     /* * * EVENTOS * * */
+    this.onGameStart = function(){
+      if(PLAYER_DISC_PROPERTIES)
+      let player = room.getPlayerList().find((player) => player.team != 0);
+      if(player)  CM.savePlayerDiscProperties(getPlayerDiscProperties(player.id));
+      else        WAITING_FOR_PLAYERS = true;
+    }
     this.onPlayerTeamChange = function(changedPlayer, byPlayer){
       if(WAITING_FOR_PLAYERS){ 
         CM.savePlayerDiscProperties(room.getPlayerDiscProperties(changedPlayer.id)); 
@@ -67,16 +77,20 @@ class Match {
     this.onGameStateChanged = (newState, ...args) => STATE = newState;
     this.onStadiumChange = function(newStadiumName, byPlayer){
       MAP_NAME = newStadiumName;
-      if(byPlayer)  MAP_WAS_SETTED = true;
+      /*
+      if(byPlayer)  MAP_WAS_SETTED  = true;
       else{         
-                    MAP_WAS_SETTED = false; 
-                    MAP_ID = null;
+                    MAP_WAS_SETTED  = false; 
+                    MAP_ID          = null;
       }
-      if(DEFAULT_STADIUMS.includes(MAP_NAME)) PLAYER_DISC_PROPERTIES = DEFAULT_PLAYER_DISC_PROPERTIES;
-      else if(MAP_WAS_SETTED)                 CM.savePlayerDiscProperties(catalog[MAP_ID].getCode().playerPhysics);
+      */
+      if(DEFAULT_STADIUMS.includes(MAP_NAME)){
+        PLAYER_DISC_PROPERTIES  = DEFAULT_PLAYER_DISC_PROPERTIES;
+        BALL_PROPERTIES         = DEFAULT_BALL_PROPERTIES;
+      }
       else{
-                                              PLAYER_DISC_PROPERTIES = null;
-                                              WAITING_FOR_PLAYERS = true;
+        PLAYER_DISC_PROPERTIES  = null;
+        BALL_PROPERTIES         = null;
       }
     }
   }
