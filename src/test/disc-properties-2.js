@@ -35,8 +35,8 @@ class Match {
           }
       }
       else room.stopGame();
-      room.setCustomStadium(catalog[index].getStringCode);
       MAP_ID = index;
+      room.setCustomStadium(catalog[index].getStringCode);
     }
     this.getMap = () => MAP_ID;
     this.savePlayerDiscProperties = function({radius,bCoeff,invMass,damping,...rest}){
@@ -64,7 +64,10 @@ class Match {
             MAP_WAS_SETTED    = false;
             MAP_ID            = null;
       }
-      else  MAP_WAS_SETTED    = true; 
+      else{
+            MAP_WAS_SETTED    = true; 
+            MAP_ID            = DEFAULT_MAPS.includes(MAP_NAME) ? null : MAP_ID;
+      }
     }
   }
 }
