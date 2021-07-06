@@ -25,7 +25,7 @@ function onGameStartHandler(){
   if(!BALL_PROPERTIES) BALL_PROPERTIES = room.getDiscProperties(0);
   if(!PLAYER_DISC_PROPERTIES){
     let player = room.getPlayerList().find((player) => player.team != 0);
-    if(player) PLAYER_DISC_PROPERTIES = filterProperties(room.getPlayerDiscProperties(changedPlayer.id));
+    if(player) PLAYER_DISC_PROPERTIES = filterProperties(room.getPlayerDiscProperties(player.id));
   }
 }
 
