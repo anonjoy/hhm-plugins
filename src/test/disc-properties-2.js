@@ -54,8 +54,6 @@ class Match {
       PLAYER_DISC_PROPERTIES = {radius,bCoeff,invMass,damping};
     }
     this.getPlayerDiscProperties = () => PLAYER_DISC_PROPERTIES;
-    this.savePlayerDiscProperties = function(){
-    }
     /* * * EVENTOS * * */
     this.onPlayerTeamChange = function(changedPlayer, byPlayer){
       if(WAITING_FOR_PLAYERS){ 
