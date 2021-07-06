@@ -40,3 +40,4 @@ function onPlayerTeamChangeHandler(changedPlayer, byPlayer){
 room.onStadiumChange    = onStadiumChangeHandler;
 room.onGameStart        = onGameStartHandler;
 room.onPlayerTeamChange = onPlayerTeamChangeHandler;
+
