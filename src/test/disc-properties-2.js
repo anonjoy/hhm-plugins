@@ -12,6 +12,7 @@ let BALL_PROPERTIES;
 
 /* * * * * * * * * *  FUNCIONES  * * * * * * * * * */
 
+const filterProperties                = ({radius, bCoeff, invMass, damping}) => ({radius, bCoeff, invMass, damping});
 const getOriginalPlayerDiscProperties = () => PLAYER_DISC_PROPERTIES;
 const getOriginalBallProperties       = () => BALL_PROPERTIES;
 
