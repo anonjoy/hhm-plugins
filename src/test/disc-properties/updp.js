@@ -9,6 +9,29 @@ room.pluginSpec = {
 
 /* * * * * * * * * *  FUNCIONES  * * * * * * * * * */
 
+function updateDiscProperties () {
+  for ( let [key, value] of Object.entries( playersDiscProperties ) ) {
+    room.setPlayerDiscProperties(key, value);
+  }
+}
+
+function onPlayerLeaveHandler ( player ) {
+  if (playersDiscProperties[player.id]) delete playersDiscProperties[player.id];
+}
+
+function onGameStartHandler () {
+  updateDiscProperties();
+}
+
+function onPositionsResetHandler () {
+  updateDiscProperties();
+}
+
+function onPlayerTeamChangeHandler ( player ) {
+  let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState;
+  if (GAME_STATE) updateDiscProperties();
+}
+
 /* * * * * * * * * * * EVENTOS * * * * * * * * * * */
 
 room.onGameStart        = onGameStartHandler;
