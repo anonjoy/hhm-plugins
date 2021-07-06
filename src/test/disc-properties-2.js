@@ -23,7 +23,7 @@ function filterDefaultPlayerDiscProperties({radius,bCoeff,invMass,damping,...res
   return {radius,bCoeff,invMass,damping};
 }
 
-class Catalog {}
+let catalog = [];
 
 class Match {
   constructor(){
@@ -47,7 +47,7 @@ class Match {
       }
       else room.stopGame();
       MAP_ID = index;
-      room.setCustomStadium(CA[index].getStringCode);
+      room.setCustomStadium(catalog[index].getStringCode);
     }
     this.getMap = () => MAP_ID;
     this.savePlayerDiscProperties = function({radius,bCoeff,invMass,damping,...rest}){
@@ -72,7 +72,7 @@ class Match {
                     MAP_ID = null;
       }
       if(DEFAULT_STADIUMS.includes(MAP_NAME)) PLAYER_DISC_PROPERTIES = DEFAULT_PLAYER_DISC_PROPERTIES;
-      else if(MAP_WAS_SETTED)                 CM.savePlayerDiscProperties(CA[MAP_ID].getCode().playerPhysics);
+      else if(MAP_WAS_SETTED)                 CM.savePlayerDiscProperties(catalog[MAP_ID].getCode().playerPhysics);
       else{
                                               PLAYER_DISC_PROPERTIES = null;
                                               WAITING_FOR_PLAYERS = true;
@@ -82,7 +82,6 @@ class Match {
 }
 
 const CM = new Match(); // Current Match
-const CA = new Catalog(); // Catalog
 
 
 function savePlayerDiscProperties(){
