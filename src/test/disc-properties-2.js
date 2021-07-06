@@ -18,6 +18,7 @@ let catalog = [];
 class Match {
   constructor(){
     /* * VARIBABLES * */
+    const DEFAULT_MAPS = ['Small', 'Easy', 'Classic', 'Big', 'Hockey', 'Rounded', 'Big Hockey', 'Big Easy', 'Big Rounded', 'Huge'];
     let PLAYER_DISC_PROPERTIES;
     let BALL_PROPERTIES;
     let GAME_STATE;
@@ -34,8 +35,8 @@ class Match {
           }
       }
       else room.stopGame();
-      MAP_ID = index;
       room.setCustomStadium(catalog[index].getStringCode);
+      MAP_ID = index;
     }
     this.getMap = () => MAP_ID;
     this.savePlayerDiscProperties = function({radius,bCoeff,invMass,damping,...rest}){
@@ -59,11 +60,11 @@ class Match {
       MAP_NAME                = newStadiumName;
       PLAYER_DISC_PROPERTIES  = null;
       BALL_PROPERTIES         = null;
-      if(byPlayer)  MAP_WAS_SETTED  = true;
-      else{         
-                    MAP_WAS_SETTED  = false; 
-                    MAP_ID          = null;
+      if(byPlayer){
+            MAP_WAS_SETTED    = false;
+            MAP_ID            = null;
       }
+      else  MAP_WAS_SETTED    = true; 
     }
   }
 }
