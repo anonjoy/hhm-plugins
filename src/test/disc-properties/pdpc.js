@@ -107,7 +107,10 @@ function onCommandDiscResetHandler ( player, arguments, argumentString ) {
 
 /** * * * ** * * *  * * * * * ** *  **/
 
-function newPlayerDiscProperties(PLAYER_ID, {x, y, xspeed, yspeed, xgravity, ygravity, ...PLAYER_DISC_PROPERTIES}){
+fun(...arr, )
+
+function newPlayerDiscProperties(PLAYER_ID, PLAYER_DISC_PROPERTIES){
+  let {...} = ORIGINAL_PLAYER_DISC_PROPERTIES
   if(!playersDiscProperties[PLAYER_ID]) playersDiscProperties[PLAYER_ID] = {};
   for (let [PROPERTY, VALUE] of Object.entries(PLAYER_DISC_PROPERTIES)){
     playersDiscProperties[PLAYER_ID][PROPERTY] = VALUE;
