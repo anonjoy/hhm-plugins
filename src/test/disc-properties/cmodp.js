@@ -7,21 +7,13 @@ room.pluginSpec = {
 
 /* * * * * * * * * *  VARIABLES  * * * * * * * * * */
 
-const TEAM = { SPEC: 0, RED: 1, BLUE: 2};
+const TEAM_ID = { SPEC: 0, RED: 1, BLUE: 2};
 let ORIGINAL_PLAYER_DISC_PROPERTIES = {};
-
-
-
 let ORIGINAL_BALL_PROPERTIES;
 
 /* * * * * * * * * *  FUNCIONES  * * * * * * * * * */
 
-function filterProperties(PLAYER_TEAM, {x, y, xspeed, yspeed, color, ...PLAYER_DISC_PROPERTIES}){
-  switch(PLAYER_TEAM){
-    case 1: case 2: return PLAYER_DISC_PROPERTIES;
-  }
-}
-
+const filterDiscProperties            = ({x, y, xspeed, yspeed, ...DISC_PROPERTIES}) => DISC_PROPERTIES;
 const getOriginalPlayerDiscProperties = (PLAYER_TEAM) => ORIGINAL_PLAYER_DISC_PROPERTIES[PLAYER_TEAM];
 const getOriginalBallProperties       = () => ORIGINAL_BALL_PROPERTIES;
 
@@ -31,27 +23,21 @@ function onStadiumChangeHandler(newStadiumName, byPlayer){
 }
 
 function onGameStartHandler(){
-  if(!ORIGINAL_BALL_PROPERTIES) ORIGINAL_BALL_PROPERTIES = room.getDiscProperties(0);
+  if(!ORIGINAL_BALL_PROPERTIES) ORIGINAL_BALL_PROPERTIES = filterDiscProperties(room.getDiscProperties(0));
   if(ORIGINAL_PLAYER_DISC_PROPERTIES === {}){
-    let player = room.getPlayerList().find((player) => player.team != 0);
-  }
-  if(!ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM.RED] || !ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM.BLUE]){
-    let player = room.getPlayerList().find((player) => player.team != 0);
-    if(player) ORIGINAL_PLAYER_DISC_PROPERTIES[player.team] = filterProperties(room.getPlayerDiscProperties(player.id));
+    let PLAYER_LIST = room.getPlayerList();
+    let RED_PLAYER  = PLAYER_LIST.find((player) => player.team === TEAM_ID.RED);
+    let BLUE_PLAYER = PLAYER_LIST.find((player) => player.team === TEAM_ID.BLUE);
+    if(RED_PLAYER)  ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM_ID.RED]  = filterDiscProperties(room.getPlayerDiscProperties(RED_PLAYER.id));
+    if(BLUE_PLAYER) ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM_ID.BLUE] = filterDiscProperties(room.getPlayerDiscProperties(BLUE_PLAYER.id));
   }
 }
 
+
 function onPlayerTeamChangeHandler(changedPlayer, byPlayer){
-  if(!ORIGINAL_PLAYER_DISC_PROPERTIES[changedPlayer.team]){
-  }
-  if(!getOriginalPlayerDiscProperties(changedPlayer.team)){
+  if(changedPlayer.team != 0 && !ORIGINAL_PLAYER_DISC_PROPERTIES[changedPlayer.team]){
     let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState();
-    if(GAME_STATE){
-      switch(changedPlayer.team){
-        case 1: ORIGINAL_RED_PLAYER_DISC_PROPERTIES   = filterProperties(room.getPlayerDiscProperties(changedPlayer.id));
-        case 2: ORIGINAL_BLUE_PLAYER_DISC_PROPERTIES  = filterProperties(room.getPlayerDiscProperties(changedPlayer.id));
-      }
-    }
+    if(GAME_STATE) = ORIGINAL_PLAYER_DISC_PROPERTIES[changedPlayer.team] = filterDiscProperties(room.getPlayerDiscProperties(changedPlayer.id));
   }
 }
 
