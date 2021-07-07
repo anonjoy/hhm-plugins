@@ -18,7 +18,7 @@ const getOriginalPlayerDiscProperties = (TEAM) => ORIGINAL_PLAYER_DISC_PROPERTIE
 const getOriginalBallProperties       = () => ORIGINAL_BALL_PROPERTIES;
 
 function onStadiumChangeHandler(newStadiumName, byPlayer){
-  ORIGINAL_PLAYER_DISC_PROPERTIES = {}
+  ORIGINAL_PLAYER_DISC_PROPERTIES = {};
   ORIGINAL_BALL_PROPERTIES        = null;
 }
 
