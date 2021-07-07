@@ -7,8 +7,8 @@ room.pluginSpec = {
 
 /* * * * * * * * * *  VARIABLES  * * * * * * * * * */
 
-const TEAM_ID = { SPEC: 0, RED: 1, BLUE: 2};
-let ORIGINAL_PLAYER_DISC_PROPERTIES = {};
+const TEAM_ID = { SPEC: 0, RED: 1, BLUE: 2 };
+let ORIGINAL_PLAYER_DISC_PROPERTIES = { 1: null, 2: null };
 let ORIGINAL_BALL_PROPERTIES;
 
 /* * * * * * * * * *  FUNCIONES  * * * * * * * * * */
@@ -18,7 +18,7 @@ const getOriginalPlayerDiscProperties = (TEAM) => ORIGINAL_PLAYER_DISC_PROPERTIE
 const getOriginalBallProperties       = () => ORIGINAL_BALL_PROPERTIES;
 
 function onStadiumChangeHandler(newStadiumName, byPlayer){
-  ORIGINAL_PLAYER_DISC_PROPERTIES = {};
+  ORIGINAL_PLAYER_DISC_PROPERTIES = { 1: null, 2: null };
   ORIGINAL_BALL_PROPERTIES        = null;
 }
 
