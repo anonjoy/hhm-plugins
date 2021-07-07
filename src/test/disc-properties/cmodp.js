@@ -27,11 +27,11 @@ function onGameStartHandler(){
   if(!ORIGINAL_BALL_PROPERTIES) ORIGINAL_BALL_PROPERTIES = filterDiscProperties(room.getDiscProperties(0));
   if(!ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM_ID.RED]){
     let RED_PLAYER  = room.getPlayerList().find((player) => player.team == TEAM_ID.RED);
-    if(RED_PLAYER)  ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM_ID.RED]  = filterDiscProperties(room.getPlayerDiscProperties(RED_PLAYER.id));
+    if(RED_PLAYER)  ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM_ID.RED]  = filterDiscProperties(room.getPlayerDiscProperties(RED_PLAYER.id)); // if !== undefined
   }
   if(!ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM_ID.BLUE]){
     let BLUE_PLAYER = room.getPlayerList().find((player) => player.team == TEAM_ID.BLUE);
-    if(BLUE_PLAYER) ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM_ID.BLUE] = filterDiscProperties(room.getPlayerDiscProperties(BLUE_PLAYER.id));
+    if(BLUE_PLAYER) ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM_ID.BLUE] = filterDiscProperties(room.getPlayerDiscProperties(BLUE_PLAYER.id)); // if !== undefined
   }
 }
 
@@ -39,7 +39,7 @@ function onGameStartHandler(){
 function onPlayerTeamChangeHandler(changedPlayer, byPlayer){
   if(changedPlayer.team != 0 && !ORIGINAL_PLAYER_DISC_PROPERTIES[changedPlayer.team]){
     let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState();
-    if(GAME_STATE) ORIGINAL_PLAYER_DISC_PROPERTIES[changedPlayer.team] = filterDiscProperties(room.getPlayerDiscProperties(changedPlayer.id));
+    if(GAME_STATE) ORIGINAL_PLAYER_DISC_PROPERTIES[changedPlayer.team] = filterDiscProperties(room.getPlayerDiscProperties(changedPlayer.id)); // if !== 0 || !== undefined
   }
 }
 
