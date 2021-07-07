@@ -26,11 +26,11 @@ function onStadiumChangeHandler(newStadiumName, byPlayer){
 function onGameStartHandler(){
   if(!ORIGINAL_BALL_PROPERTIES) ORIGINAL_BALL_PROPERTIES = filterDiscProperties(room.getDiscProperties(0));
   if(!ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM_ID.RED]){
-    let RED_PLAYER  = room.getPlayerList().find((player) => player.team === TEAM_ID.RED);
+    let RED_PLAYER  = room.getPlayerList().find((player) => player.team == TEAM_ID.RED);
     if(RED_PLAYER)  ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM_ID.RED]  = filterDiscProperties(room.getPlayerDiscProperties(RED_PLAYER.id));
   }
   if(!ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM_ID.BLUE]){
-    let BLUE_PLAYER = room.getPlayerList().find((player) => player.team === TEAM_ID.BLUE);
+    let BLUE_PLAYER = room.getPlayerList().find((player) => player.team == TEAM_ID.BLUE);
     if(BLUE_PLAYER) ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM_ID.BLUE] = filterDiscProperties(room.getPlayerDiscProperties(BLUE_PLAYER.id));
   }
 }
