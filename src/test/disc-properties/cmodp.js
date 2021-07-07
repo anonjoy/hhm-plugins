@@ -2,7 +2,7 @@
 var room = HBInit();
 
 room.pluginSpec = {
-  name    : `test/disc-properties/cmodp`, // Current Map Original Disc Properties
+  name: `test/disc-properties/cmodp`, // Current Map Original Disc Properties
 };
 
 /* * * * * * * * * *  VARIABLES  * * * * * * * * * */
