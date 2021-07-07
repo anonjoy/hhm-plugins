@@ -84,7 +84,7 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
 const filterDiscProperties = ({x, y, xspeed, yspeed, ...DISC_PROPERTIES}) => DISC_PROPERTIES;
 
 function newPlayerDiscProperties(PLAYER_ID, NEW_PLAYER_DISC_PROPERTIES){
-  Object.assign({...playersDiscProperties[PLAYER_ID]} = {}, filterDiscProperties(NEW_PLAYER_DISC_PROPERTIES));
+  playersDiscProperties[PLAYER_ID] = Object.assign({}, playersDiscProperties[PLAYER_ID], filterDiscProperties(NEW_PLAYER_DISC_PROPERTIES));
   let PLAYER_TEAM = room.getPlayer(PLAYER_ID).team;
   if(PLAYER_TEAM){
     let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState();
