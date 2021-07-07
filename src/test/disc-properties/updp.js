@@ -23,12 +23,10 @@ function onPositionsResetHandler(){
 }
 
 function onPlayerTeamChangeHandler(changedPlayer, byPlayer){
-  if(changedPlayer.team != 0 && playersDiscProperties[changedPlayer.id]){
-    let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState;
-    if (GAME_STATE){
-      let PLAYER_DISC_PROPERTIES = room.getPlugin(`test/disc-properties/dpc`).getPlayersDiscProperties();
-       room.setPlayerDiscProperties(changedPlayer.id, playersDiscProperties[changedPlayer.id]);
-    }
+  let PLAYER_DISC_PROPERTIES = room.getPlugin(`test/disc-properties/dpc`).getPlayersDiscProperties(changedPlayer.id);
+  if(changedPlayer.team != 0 && PLAYER_DISC_PROPERTIES){
+    let GAME_STATE =  room.getPlugin(`sav/game-state`).getGameState;
+    if (GAME_STATE)   room.setPlayerDiscProperties(changedPlayer.id, PLAYER_DISC_PROPERTIES); // if !== 0 || !== undefined
   }
 }
 
