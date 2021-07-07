@@ -107,17 +107,13 @@ function onCommandDiscResetHandler ( player, arguments, argumentString ) {
 
 /** * * * ** * * *  * * * * * ** *  **/
 
-function newPlayerDiscProperties(PLAYER_ID, { ...}){
-  let 
+function newPlayerDiscProperties(PLAYER_ID, {x, y, xspeed, yspeed, xgravity, ygravity, ...PLAYER_DISC_PROPERTIES}){
   if(!playersDiscProperties[PLAYER_ID]) playersDiscProperties[PLAYER_ID] = {};
-  for ( let [PLAYER_DISC_PROPERTY, VALUE] of Object.entries( properties ) ) {
-    if (!config.updateExceptions.includes(key)) playersDiscProperties[id][key] = value;
+  for (let [PROPERTY, VALUE] of Object.entries(PLAYER_DISC_PROPERTIES)){
+    playersDiscProperties[PLAYER_ID][PROPERTY] = VALUE;
   }
   let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState();
-  state = getGameState();
-  if ( state == 1 || state == 2 ) {
-    room.setPlayerDiscProperties( id, properties );
-  }
+  if(GAME_STATE) room.setPlayerDiscProperties(PLAYER_ID, PLAYER_DISC_PROPERTIES);
 }
 
 function onCommandSizeHandler(player, arguments, argumentString){
