@@ -2,7 +2,7 @@
 var room = HBInit();
 
 room.pluginSpec = {
-  name    : `test/disc-properties/updp`, // Update Player Disc Properties
+  name: `test/disc-properties/updp`, // Update Player Disc Properties
 };
 
 /* * * * * * * * * *  VARIABLES  * * * * * * * * * */
