@@ -14,7 +14,7 @@ let ORIGINAL_BALL_PROPERTIES;
 /* * * * * * * * * *  FUNCIONES  * * * * * * * * * */
 
 const filterDiscProperties            = ({x, y, xspeed, yspeed, ...DISC_PROPERTIES}) => DISC_PROPERTIES;
-const getOriginalPlayerDiscProperties = (PLAYER_TEAM) => ORIGINAL_PLAYER_DISC_PROPERTIES[PLAYER_TEAM];
+const getOriginalPlayerDiscProperties = (TEAM) => ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM];
 const getOriginalBallProperties       = () => ORIGINAL_BALL_PROPERTIES;
 
 function onStadiumChangeHandler(newStadiumName, byPlayer){
