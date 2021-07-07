@@ -23,10 +23,24 @@ const onCommandDiscHandlerData = {
   },
 };
 
-const onCommandDiscResetHandlerData = {
+const onCommand1DiscResetHandlerData = {
   'sav/help': {
     text: ` PLAYER_ID/all (OPTIONAL), to reset the properties of player's body. (Reset your properties if you don't pass any parameter)`,
-    roles: config.allowedRoles,
+    roles: ,
+  },
+};
+
+const onCommand0DiscResetHandlerData = {
+  'sav/help': {
+    text: ` PLAYER_ID/all (OPTIONAL), to reset the properties of player's body. (Reset your properties if you don't pass any parameter)`,
+    roles: ,
+  },
+};
+
+const onCommandDiscResetAllHandlerData = {
+  'sav/help': {
+    text: ``,
+    roles: ,
   },
 };
 
@@ -103,19 +117,35 @@ function onCommandSizeHandler(player, arguments, argumentString){
   return false;
 }
 
-function onCommandDiscResetHandler(player, arguments, argumentString){
-  let ID_ARGUMENT = arguments[0];
-  if(isNaN(ID_ARGUMENT)) return error(3,player.id,ID_ARGUMENT);
-  room.getPlayerList().some((player) => player.id == ID_ARGUMENT) ? delete playersDiscProperties[ID_ARGUMENT] : error[3](player.id, ID_ARGUMENT);
+function onCommand1DiscResetHandler(player, arguments, argumentString){
+  let PLAYER_ROLES        = room.getPlugin(`sav/roles`).getPlayerRoles(player.id);
+  let HAS_AUTHORIZED_ROLE = AUTHORIZED_ROLES.some((AUTHORIZED_ROLE) => PLAYER_ROLES.includes(AUTHORIZED_ROLE));
+  if(HAS_AUTHORIZED_ROLE){ // if !== false
+    let TARGET = room.getPlayerList().find((player) => player.id == arguments[0]);
+    if(TARGET) return onCommand0DiscResetHandler(TARGET); // if !== false, then return false;
+    else return error; // return false;
+  }
+}
+
+function onCommand0DiscResetHandler(player, ...args){
+  delete playersDiscProperties[player.id];
+  if(player.team){ // if !== 0
+    let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState();
+    if(GAME_STATE){ // if !== 0 || !== undefined
+      let ORIGINAL_PLAYER_DISC_PROPERTIES = room.getPlugin(`...`).getOriginalPlayerDiscProperties(player.team);
+      if(ORIGINAL_PLAYER_DISC_PROPERTIES)   room.setPlayerDiscProperties(player.id, ORIGINAL_PLAYER_DISC_PROPERTIES);
+    }
+  }
   return false;
 }
 
-function onCommandDiscResetHandler(player, arguments, argumentString){
-  let ARGUMENT = arguments[0];
-  if(!ARGUMENT && playersDiscProperties[player.id]) delete playersDiscProperties[player.id];
-  else if(isNaN(ARGUMENT) && ARGUMENT == 'all') playersDiscProperties = {};
-  else room.getPlayerList().some((player) => player.id == ARGUMENT) ? delete playersDiscProperties[ARGUMENT] : error[3](player.id, ARGUMENT);
-  return false;
+function onCommandDiscResetAllHandler(player, ...args){
+  let PLAYER_ROLES        = room.getPlugin(`sav/roles`).getPlayerRoles(player.id);
+  let HAS_AUTHORIZED_ROLE = AUTHORIZED_ROLES.some((AUTHORIZED_ROLE) => PLAYER_ROLES.includes(AUTHORIZED_ROLE));
+  if(HAS_AUTHORIZED_ROLE){ // if !== false
+    resetAllPlayerDiscProperties();
+    return false;
+  }
 }
 
 /* * * * * * * * * * * EVENTOS * * * * * * * * * * */
@@ -129,10 +159,14 @@ room.onCommand_disc = {
   data: onCommandDiscHandlerData,
 };
 room.onCommand1_disc_reset = {
-  function: onCommandDiscResetHandler,
-  data: onCommandDiscResetHandlerData,
+  function: onCommand1DiscResetHandler,
+  data: onCommand1DiscResetHandlerData,
+};
+room.onCommand0_disc_reset = {
+  function: onCommand0DiscResetHandler,
+  data: onCommand0DiscResetHandlerData,
 };
 room.onCommand0_disc_reset_all = {
-  function: onCommandDiscResetHandler,
-  data: onCommandDiscResetHandlerData,
+  function: onCommandDiscResetAllHandler,
+  data: onCommandDiscResetAllHandlerData,
 };
