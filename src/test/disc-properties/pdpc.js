@@ -59,6 +59,7 @@ function error(ERROR, PLAYER_ID, ARGUMENT){
     case 3: room.sendAnnouncement(MESSAGE + `ID.`, PLAYER_ID, FORMAT); break;
     case 4: room.sendAnnouncement(MESSAGE + `value. (Must be a number between ` + config.defaultMinSize + ` and ` + config.defaultMaxSize + `)`, PLAYER_ID, FORMAT); break;
   }
+  return false;
 }
 
 function onCommandDiscHandler ( player, arguments, argumentString ) {
@@ -102,6 +103,21 @@ function onCommandSizeHandler(player, arguments, argumentString){
   return false;
 }
 
+function onCommandDiscResetHandler(player, arguments, argumentString){
+  let ID_ARGUMENT = arguments[0];
+  if(isNaN(ID_ARGUMENT)) return error(3,player.id,ID_ARGUMENT);
+  room.getPlayerList().some((player) => player.id == ID_ARGUMENT) ? delete playersDiscProperties[ID_ARGUMENT] : error[3](player.id, ID_ARGUMENT);
+  return false;
+}
+
+function onCommandDiscResetHandler(player, arguments, argumentString){
+  let ARGUMENT = arguments[0];
+  if(!ARGUMENT && playersDiscProperties[player.id]) delete playersDiscProperties[player.id];
+  else if(isNaN(ARGUMENT) && ARGUMENT == 'all') playersDiscProperties = {};
+  else room.getPlayerList().some((player) => player.id == ARGUMENT) ? delete playersDiscProperties[ARGUMENT] : error[3](player.id, ARGUMENT);
+  return false;
+}
+
 /* * * * * * * * * * * EVENTOS * * * * * * * * * * */
 
 room.onCommand1_size = {
@@ -112,7 +128,11 @@ room.onCommand_disc = {
   function: onCommandDiscHandler,
   data: onCommandDiscHandlerData,
 };
-room.onCommand_disc_reset = {
+room.onCommand1_disc_reset = {
+  function: onCommandDiscResetHandler,
+  data: onCommandDiscResetHandlerData,
+};
+room.onCommand0_disc_reset_all = {
   function: onCommandDiscResetHandler,
   data: onCommandDiscResetHandlerData,
 };
