@@ -7,7 +7,28 @@ room.pluginSpec = {
 
 /* * * * * * * * * *  VARIABLES  * * * * * * * * * */
 
-/* * * * * * * * * *  FUNCIONES  * * * * * * * * * */
+let playersDiscProperties = {};
+
+const onCommandSizeHandlerData = {
+  'sav/help': {
+    text: ` SIZE_NUMBER, to change the size of your body.`,
+    roles: config.defaultRole,
+  },
+};
+
+const onCommandDiscHandlerData = {
+  'sav/help': {
+    text: ` [DISC_PROPERTY VALUE] PLAYER_ID (OPTIONAL), to change the properties of a player's body (Change your body if you don't pass PLAYER_ID parameter)`,
+    roles: config.allowedRoles,
+  },
+};
+
+const onCommandDiscResetHandlerData = {
+  'sav/help': {
+    text: ` PLAYER_ID/all (OPTIONAL), to reset the properties of player's body. (Reset your properties if you don't pass any parameter)`,
+    roles: config.allowedRoles,
+  },
+};
 
 const discProperties = {
   'x' : `float`,
@@ -26,13 +47,7 @@ const discProperties = {
   
 };
 
-let playersDiscProperties = {};
-
-function updateDiscProperties () {
-  for ( let [key, value] of Object.entries( playersDiscProperties ) ) {
-    room.setPlayerDiscProperties(key, value);
-  }
-}
+/* * * * * * * * * *  FUNCIONES  * * * * * * * * * */
 
 function onCommandDiscPropertiesHandler ( id, properties ) {
   if ( !playersDiscProperties[id] ) playersDiscProperties[id] = {};
@@ -45,13 +60,6 @@ function onCommandDiscPropertiesHandler ( id, properties ) {
     room.setPlayerDiscProperties( id, properties );
   }
 }
-
-const onCommandDiscHandlerData = {
-  'sav/help': {
-    text: ` [DISC_PROPERTY VALUE] PLAYER_ID (OPTIONAL), to change the properties of a player's body (Change your body if you don't pass PLAYER_ID parameter)`,
-    roles: config.allowedRoles,
-  },
-};
 
 const error = {
   1 : (id, property) => {room.sendAnnouncement(`The argument ` + property + ` is not a valid property of discs.`, id, config.format.error);},
@@ -89,36 +97,6 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
   return false;
 }
 
-const onCommandSizeHandlerData = {
-  'sav/help': {
-    text: ` SIZE_NUMBER, to change the size of your body.`,
-    roles: config.defaultRole,
-  },
-};
-
-function onCommandSizeHandler ( player, arguments, argumentString ) {
-  
-  let argument = parseInt(arguments[0]);
-  player.roles = roles.getPlayerRoles(player.id);
-  
-  if ( isNaN(argument) ) error[5](player.id);
-  else if ( argument >= config.defaultMinSize && argument <= config.defaultMaxSize ) {
-    onCommandDiscPropertiesHandler( player.id, { 'radius' : argument } );
-  }
-  else if ( config.allowedRoles.some((role) => player.roles.includes(role)) ) {
-    onCommandDiscPropertiesHandler( player.id, { 'radius' : argument } );
-  }
-  else error[5](player.id);
-  return false;
-}
-
-const onCommandDiscResetHandlerData = {
-  'sav/help': {
-    text: ` PLAYER_ID/all (OPTIONAL), to reset the properties of player's body. (Reset your properties if you don't pass any parameter)`,
-    roles: config.allowedRoles,
-  },
-};
-
 function onCommandDiscResetHandler ( player, arguments, argumentString ) {
   let argument = arguments[0];
   if (!argument && playersDiscProperties[player.id]) delete playersDiscProperties[player.id];
@@ -127,22 +105,33 @@ function onCommandDiscResetHandler ( player, arguments, argumentString ) {
   return false;
 }
 
-function onPlayerLeaveHandler ( player ) {
-  if (playersDiscProperties[player.id]) delete playersDiscProperties[player.id];
+/** * * * ** * * *  * * * * * ** *  **/
+
+function newPlayerDiscProperties(PLAYER_ID, { ...}){
+  let 
+  if(!playersDiscProperties[PLAYER_ID]) playersDiscProperties[PLAYER_ID] = {};
+  for ( let [PLAYER_DISC_PROPERTY, VALUE] of Object.entries( properties ) ) {
+    if (!config.updateExceptions.includes(key)) playersDiscProperties[id][key] = value;
+  }
+  let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState();
+  state = getGameState();
+  if ( state == 1 || state == 2 ) {
+    room.setPlayerDiscProperties( id, properties );
+  }
 }
 
-function onGameStartHandler () {
-  updateDiscProperties();
+function onCommandSizeHandler(player, arguments, argumentString){
+  let SIZE_ARGUMENT = arguments[0];
+  if(isNaN(SIZE_ARGUMENT)) return error; // EL ARGUMENTO NO ES UN NÚMERO
+  let PLAYER_ROLES = room.getPlugin(`sav/roles`).getPlayerRoles(player.id);
+  if(!PLAYER_ROLES) return error; // NO PUDO CARGAR EL MODULO
+  let HAS_AUTHORIZED_ROLE = config.allowedRoles.some((AUTHORIZED_ROLE) => PLAYER_ROLES.includes(AUTHORIZED_ROLE));
+  if((SIZE_ARGUMENT < DEFAULT_ROLE_MIN_SIZE || SIZE_ARGUMENT > DEFAULT_ROLE_MAX_SIZE) && !HAS_AUTHORIZED_ROLE) return error; // EL ARGUMENTO ESTA FUERA DE LOS LIMITES
+  newPlayerDiscProperties(player.id, {'radius': SIZE_ARGUMENT});
+  return false;
 }
 
-function onPositionsResetHandler () {
-  updateDiscProperties();
-}
-
-function onPlayerTeamChangeHandler ( player ) {
-  let state = getGameState();
-  if ( state == 1 || state == 2  ) updateDiscProperties();
-}
+/* * * * * * * * * * * EVENTOS * * * * * * * * * * */
 
 room.onCommand1_size = {
   function: onCommandSizeHandler,
@@ -156,11 +145,3 @@ room.onCommand_disc_reset = {
   function: onCommandDiscResetHandler,
   data: onCommandDiscResetHandlerData,
 };
-room.onPlayerLeave = onPlayerLeaveHandler;
-room.onGameStart = onGameStartHandler;
-room.onPositionsReset = onPositionsResetHandler;
-room.onPlayerTeamChange = onPlayerTeamChangeHandler;
-
-
-/* * * * * * * * * * * EVENTOS * * * * * * * * * * */
-
