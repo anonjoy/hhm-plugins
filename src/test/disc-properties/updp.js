@@ -27,9 +27,9 @@ function onPositionsResetHandler () {
   updateDiscProperties();
 }
 
-function onPlayerTeamChangeHandler ( player ) {
+function onPlayerTeamChangeHandler (changedPlayer, byPlayer) {
   let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState;
-  if (GAME_STATE) updateDiscProperties();
+  if (GAME_STATE && changedPlayer.team != 0) updateDiscProperties();
 }
 
 /* * * * * * * * * * * EVENTOS * * * * * * * * * * */
