@@ -30,7 +30,7 @@ const onCommandDiscResetHandlerData = {
   },
 };
 
-const discProperties = {
+const DISC_PROPERTIES_LIST = {
   'x' : `float`,
   'y' : `float`,
   'xspeed' : `float`,
@@ -62,21 +62,21 @@ function error(ERROR, PLAYER_ID, ARGUMENT){
 }
 
 function onCommandDiscHandler ( player, arguments, argumentString ) {
-  if (!arguments[0] || !arguments[1]) return error[4](player.id);
   let PROPERTIES = {};
-  let PROPERTY;
-  let VALUE;
+  let PROPERTY = arguments[0];
+  let VALUE = arguments[1];
+  if (!PROPERTY || !VALUE) return error(0,player.id);
   let LIMIT = arguments.length % 2 != 0 ? arguments.length - 1 : arguments.length;
   for (let i = 0; i < LIMIT; i+=2) {
     PROPERTY = arguments[i];
-    VALUE = parseFloat(arguments[i+1]);
-    if (!(PROPERTY in discProperties)) return error;
-    if (isNaN(VALUE)) return error;
-    if (discProperties[PROPERTY] == `int` && !Number.isInteger(VALUE)) return error;
+    VALUE = arguments[i+1];
+    if (!(PROPERTY in DISC_PROPERTIES_LIST)) return error(1,player.id,PROPERTY);
+    if (isNaN(VALUE)) return error(2,player.id,VALUE);
+    if (DISC_PROPERTIES_LIST[PROPERTY] == `int` && !Number.isInteger(parseFloat(VALUE))) return error(2,player.id,VALUE);
     PROPERTIES[PROPERTY] = VALUE;
   }
-  let PLAYER_ID = arguments.length % 2 != 0 ? arguments[LIMIT] : player.id;
-  !isNaN(PLAYER_ID) && room.getPlayerList().some((player) => player.id == PLAYER_ID) ? newPlayerDiscProperties(PLAYER_ID, PROPERTIES) : error;
+  let ID_ARGUMENT = arguments.length % 2 != 0 ? arguments[LIMIT] : player.id;
+  !isNaN(ID_ARGUMENT) && room.getPlayerList().some((player) => player.id == ID_ARGUMENT) ? newPlayerDiscProperties(ID_ARGUMENT, PROPERTIES) : error(3,player.id,ID_ARGUMENT);
   return false;
 }
 
