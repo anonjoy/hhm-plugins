@@ -49,70 +49,46 @@ const discProperties = {
 
 /* * * * * * * * * *  FUNCIONES  * * * * * * * * * */
 
-function onCommandDiscPropertiesHandler ( id, properties ) {
-  if ( !playersDiscProperties[id] ) playersDiscProperties[id] = {};
-  for ( let [key, value] of Object.entries( properties ) ) {
-    if (!config.updateExceptions.includes(key)) playersDiscProperties[id][key] = value;
-  }
-  let state;
-  state = getGameState();
-  if ( state == 1 || state == 2 ) {
-    room.setPlayerDiscProperties( id, properties );
+function error(ERROR, PLAYER_ID, ARGUMENT){
+  let MESSAGE = `The argument '` + ARGUMENT + `' is not a valid `;
+  let FORMAT = config.format.error;
+  switch(ERROR){
+    case 0: room.sendAnnouncement(`DISC_PROPERTY and VALUE parameters are necessary.`, PLAYER_ID, FORMAT); break;
+    case 1: room.sendAnnouncement(MESSAGE + `property of discs.`, PLAYER_ID, FORMAT); break;
+    case 2: room.sendAnnouncement(MESSAGE + `value.`, PLAYER_ID, FORMAT); break;
+    case 3: room.sendAnnouncement(MESSAGE + `ID.`, PLAYER_ID, FORMAT); break;
+    case 4: room.sendAnnouncement(MESSAGE + `value. (Must be a number between ` + config.defaultMinSize + ` and ` + config.defaultMaxSize + `)`, PLAYER_ID, FORMAT); break;
   }
 }
-
-const error = {
-  1 : (id, property) => {room.sendAnnouncement(`The argument ` + property + ` is not a valid property of discs.`, id, config.format.error);},
-  2 : (id, property) => {room.sendAnnouncement(`The VALUE argument of the property ` + property + ` is not a valid value.`, id, config.format.error);},
-  3 : (id, argID) => {room.sendAnnouncement(`The argument ` + argID + ` is not a valid ID.`, id, config.format.error);},
-  4 : (id) => {room.sendAnnouncement(`DISC_PROPERTY and VALUE parameters are necessary.`, id, config.format.error);},
-  5 : (id) => {room.sendAnnouncement(`The argument must be a number between ` + config.defaultMinSize + ` and ` + config.defaultMaxSize + `.`, id, config.format.error);},
-};
 
 function onCommandDiscHandler ( player, arguments, argumentString ) {
   if (!arguments[0] || !arguments[1]) return error[4](player.id);
-  let properties = {};
-  let property;
-  let value;
-  let length = arguments.length % 2 != 0 ? arguments.length - 1 : arguments.length;
-  for (let i = 0; i < length; i+=2) {
-    property = arguments[i];
-    value = parseFloat(arguments[i+1]);
-    if (!(property in discProperties)) {
-      error[1](player.id, property);
-      continue;
-    }
-    if (isNaN(value)) {
-      error[2](player.id, property);
-      continue;
-    }
-    if (discProperties[property] == `int` && !Number.isInteger(value)) {
-      error[2](player.id, property);
-      continue;
-    }
-    properties[property] = value;
+  let PROPERTIES = {};
+  let PROPERTY;
+  let VALUE;
+  let LIMIT = arguments.length % 2 != 0 ? arguments.length - 1 : arguments.length;
+  for (let i = 0; i < LIMIT; i+=2) {
+    PROPERTY = arguments[i];
+    VALUE = parseFloat(arguments[i+1]);
+    if (!(PROPERTY in discProperties)) return error;
+    if (isNaN(VALUE)) return error;
+    if (discProperties[PROPERTY] == `int` && !Number.isInteger(VALUE)) return error;
+    PROPERTIES[PROPERTY] = VALUE;
   }
-  let id = arguments.length % 2 != 0 ? arguments[arguments.length - 1] : player.id;
-  !isNaN(id) && room.getPlayerList().some((player) => player.id == id) ? onCommandDiscPropertiesHandler(id, properties) : error[3](player.id, id);
+  let PLAYER_ID = arguments.length % 2 != 0 ? arguments[LIMIT] : player.id;
+  !isNaN(PLAYER_ID) && room.getPlayerList().some((player) => player.id == PLAYER_ID) ? newPlayerDiscProperties(PLAYER_ID, PROPERTIES) : error;
   return false;
 }
-
-function onCommandDiscResetHandler ( player, arguments, argumentString ) {
-  let argument = arguments[0];
-  if (!argument && playersDiscProperties[player.id]) delete playersDiscProperties[player.id];
-  else if ( isNaN(argument) && argument == 'all' ) playersDiscProperties = {};
-  else !isNaN(argument) && room.getPlayerList().some((player) => player.id == argument) ? delete playersDiscProperties[argument] : error[3](player.id, argument);
-  return false;
-}
-
-/** * * * ** * * *  * * * * * ** *  **/
 
 const filterDiscProperties = ({x, y, xspeed, yspeed, ...DISC_PROPERTIES}) => DISC_PROPERTIES;
 
 function newPlayerDiscProperties(PLAYER_ID, NEW_PLAYER_DISC_PROPERTIES){
   Object.assign({...playersDiscProperties[PLAYER_ID]} = {}, filterDiscProperties(NEW_PLAYER_DISC_PROPERTIES));
-  let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState();
-  if(GAME_STATE) room.setPlayerDiscProperties(PLAYER_ID, NEW_PLAYER_DISC_PROPERTIES);
+  let PLAYER_TEAM = room.getPlayer(PLAYER_ID).team;
+  if(PLAYER_TEAM){
+    let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState();
+    if(GAME_STATE) room.setPlayerDiscProperties(PLAYER_ID, NEW_PLAYER_DISC_PROPERTIES);
+  }
 }
 
 function onCommandSizeHandler(player, arguments, argumentString){
