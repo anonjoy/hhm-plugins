@@ -31,7 +31,7 @@ function onGameStartHandler(){
 
 function onPlayerTeamChangeHandler(changedPlayer, byPlayer){
   if(!ORIGINAL_PLAYER_DISC_PROPERTIES){
-    let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState;
+    let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState();
     if(GAME_STATE && changedPlayer.team != 0) ORIGINAL_PLAYER_DISC_PROPERTIES = filterProperties(room.getPlayerDiscProperties(changedPlayer.id));
   }
 }
