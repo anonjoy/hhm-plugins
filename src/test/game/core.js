@@ -9,10 +9,20 @@ class Game {
   constructor(){
     let GAME_STATE = 0;
     let PREVIOUS_GAME_STATE;
-    this.getGameState = () => GAME_STATE;
+    let ORIGINAL_BALL_PROPERTIES;
+    let ORIGINAL_PLAYER_DISC_PROPERTIES = {};
+    this.getGameState                     = () => GAME_STATE;
+    this.getOriginalBallProperties        = () => ORIGINAL_BALL_PROPERTIES;
+    this.getOriginalPlayerDiscProperties  = (TEAM) => ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM];
     this.setGameState = function(NEW_STATE){
       PREVIOUS_GAME_STATE = GAME_STATE;
       GAME_STATE = NEW_STATE;
+    }
+    this.setOriginalBallProperties = function(BALL_PROPERTIES){
+      ORIGINAL_BALL_PROPERTIES = BALL_PROPERTIES;
+    }
+    this.setOriginalPlayerDiscProperties = function(PLAYER_DISC_PROPERTIES, TEAM){
+      ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM] = PLAYER_DISC_PROPERTIES;
     }
   }
 }
