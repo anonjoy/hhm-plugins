@@ -64,6 +64,7 @@ const DISC_PROPERTIES_LIST = {
 
 /* * * * * * * * * *  FUNCIONES  * * * * * * * * * */
 
+const AUTHORIZED_ROLES = room.getConfig().allowRoles;
 const filterDiscProperties = ({x, y, xspeed, yspeed, ...DISC_PROPERTIES}) => DISC_PROPERTIES;
 
 function error(ERROR, PLAYER_ID, ARGUMENT){
