@@ -6,6 +6,7 @@ room.pluginSpec = {
 };
 
 /* * * * * * * * * *  VARIABLES  * * * * * * * * * */
+const TEAM_ID = { SPEC: 0, RED: 1, BLUE: 2 };
 
 let playersDiscProperties = {};
 
@@ -63,6 +64,8 @@ const DISC_PROPERTIES_LIST = {
 
 /* * * * * * * * * *  FUNCIONES  * * * * * * * * * */
 
+const filterDiscProperties = ({x, y, xspeed, yspeed, ...DISC_PROPERTIES}) => DISC_PROPERTIES;
+
 function error(ERROR, PLAYER_ID, ARGUMENT){
   let MESSAGE = `The argument '` + ARGUMENT + `' is not a valid `;
   let FORMAT = config.format.error;
@@ -73,6 +76,41 @@ function error(ERROR, PLAYER_ID, ARGUMENT){
     case 3: room.sendAnnouncement(MESSAGE + `ID.`, PLAYER_ID, FORMAT); break;
     case 4: room.sendAnnouncement(MESSAGE + `value. (Must be a number between ` + config.defaultMinSize + ` and ` + config.defaultMaxSize + `)`, PLAYER_ID, FORMAT); break;
   }
+  return false;
+}
+
+function resetAllPlayerDiscProperties(){
+  playersDiscProperties = {};
+  let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState();
+  if(GAME_STATE){ // if !== 0 || !== undefined
+    let GET_ORIGINAL_PLAYER_DISC_PROPERTIES = room.getPlugin(`...`).getOriginalPlayerDiscProperties;
+    if(GET_ORIGINAL_PLAYER_DISC_PROPERTIES){ // if !== undefined
+      let PLAYER_LIST = room.getPlayerList();
+      PLAYER_LIST.forEach((player) => {
+        if(player.team && GET_ORIGINAL_PLAYER_DISC_PROPERTIES(player.team)) room.setPlayerDiscProperties(player.id, GET_ORIGINAL_PLAYER_DISC_PROPERTIES(player.team));
+        // if !== 0 && !== null
+      });
+    }
+  }
+}
+
+function newPlayerDiscProperties(PLAYER_ID, NEW_PLAYER_DISC_PROPERTIES){
+  playersDiscProperties[PLAYER_ID] = Object.assign({}, playersDiscProperties[PLAYER_ID], filterDiscProperties(NEW_PLAYER_DISC_PROPERTIES));
+  let PLAYER_TEAM = room.getPlayer(PLAYER_ID).team;
+  if(PLAYER_TEAM){
+    let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState();
+    if(GAME_STATE) room.setPlayerDiscProperties(PLAYER_ID, NEW_PLAYER_DISC_PROPERTIES);
+  }
+}
+
+function onCommandSizeHandler(player, arguments, argumentString){
+  let SIZE_ARGUMENT         = arguments[0];
+  if(isNaN(SIZE_ARGUMENT))  return error; // EL ARGUMENTO NO ES UN NÚMERO
+  let PLAYER_ROLES          = room.getPlugin(`sav/roles`).getPlayerRoles(player.id);
+  if(!PLAYER_ROLES)         return error; // NO PUDO CARGAR EL MODULO
+  let HAS_AUTHORIZED_ROLE   = config.allowedRoles.some((AUTHORIZED_ROLE) => PLAYER_ROLES.includes(AUTHORIZED_ROLE));
+  if((SIZE_ARGUMENT < DEFAULT_ROLE_MIN_SIZE || SIZE_ARGUMENT > DEFAULT_ROLE_MAX_SIZE) && !HAS_AUTHORIZED_ROLE) return error; // EL ARGUMENTO ESTA FUERA DE LOS LIMITES
+  newPlayerDiscProperties(player.id, {'radius': SIZE_ARGUMENT});
   return false;
 }
 
@@ -92,28 +130,6 @@ function onCommandDiscHandler ( player, arguments, argumentString ) {
   }
   let ID_ARGUMENT = arguments.length % 2 != 0 ? arguments[LIMIT] : player.id;
   !isNaN(ID_ARGUMENT) && room.getPlayerList().some((player) => player.id == ID_ARGUMENT) ? newPlayerDiscProperties(ID_ARGUMENT, PROPERTIES) : error(3,player.id,ID_ARGUMENT);
-  return false;
-}
-
-const filterDiscProperties = ({x, y, xspeed, yspeed, ...DISC_PROPERTIES}) => DISC_PROPERTIES;
-
-function newPlayerDiscProperties(PLAYER_ID, NEW_PLAYER_DISC_PROPERTIES){
-  playersDiscProperties[PLAYER_ID] = Object.assign({}, playersDiscProperties[PLAYER_ID], filterDiscProperties(NEW_PLAYER_DISC_PROPERTIES));
-  let PLAYER_TEAM = room.getPlayer(PLAYER_ID).team;
-  if(PLAYER_TEAM){
-    let GAME_STATE = room.getPlugin(`sav/game-state`).getGameState();
-    if(GAME_STATE) room.setPlayerDiscProperties(PLAYER_ID, NEW_PLAYER_DISC_PROPERTIES);
-  }
-}
-
-function onCommandSizeHandler(player, arguments, argumentString){
-  let SIZE_ARGUMENT = arguments[0];
-  if(isNaN(SIZE_ARGUMENT)) return error; // EL ARGUMENTO NO ES UN NÚMERO
-  let PLAYER_ROLES = room.getPlugin(`sav/roles`).getPlayerRoles(player.id);
-  if(!PLAYER_ROLES) return error; // NO PUDO CARGAR EL MODULO
-  let HAS_AUTHORIZED_ROLE = config.allowedRoles.some((AUTHORIZED_ROLE) => PLAYER_ROLES.includes(AUTHORIZED_ROLE));
-  if((SIZE_ARGUMENT < DEFAULT_ROLE_MIN_SIZE || SIZE_ARGUMENT > DEFAULT_ROLE_MAX_SIZE) && !HAS_AUTHORIZED_ROLE) return error; // EL ARGUMENTO ESTA FUERA DE LOS LIMITES
-  newPlayerDiscProperties(player.id, {'radius': SIZE_ARGUMENT});
   return false;
 }
 
