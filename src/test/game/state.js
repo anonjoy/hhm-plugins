@@ -7,13 +7,7 @@ room.pluginSpec = {
 
 const GAME = room.getPlugin(`test/game/core`).getGameObject();
 
-const STATES = {
-  STOPPED: 0,
-  STARTED: 1,
-  PAUSED: 2,
-};
-
-room.onGameStart    = () => GAME.setState(STATES.STARTED);
-room.onGameStop     = () => GAME.setState(STATES.STOPPED);
-room.onGamePause    = () => GAME.setState(STATES.PAUSED);
-room.onGameUnpause  = () => GAME.setState(STATES.STARTED);
+room.onGameStart    = () => GAME.setState(1);
+room.onGameStop     = () => GAME.setState(0);
+room.onGamePause    = () => GAME.setState(2);
+room.onGameUnpause  = () => GAME.setState(1);
