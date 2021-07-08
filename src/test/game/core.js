@@ -2,7 +2,7 @@
 var room = HBInit();
 
 room.pluginSpec = {
-  name: `...`, // Current Map Original Disc Properties
+  name: `...`,
 };
 
 class Game {
