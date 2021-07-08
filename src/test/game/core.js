@@ -15,7 +15,7 @@ class Game {
     this.getPreviousState                 = () => PREVIOUS_STATE;
     this.getOriginalBallProperties        = () => ORIGINAL_BALL_PROPERTIES;
     this.getOriginalPlayerDiscProperties  = (TEAM) => ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM];
-    this.setGameState = function(NEW_STATE){
+    this.setState = function(NEW_STATE){
       PREVIOUS_STATE = STATE;
       STATE = NEW_STATE;
     }
