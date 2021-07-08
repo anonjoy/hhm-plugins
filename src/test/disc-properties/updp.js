@@ -10,6 +10,10 @@ room.pluginSpec = {
 /* * * * * * * * * *  FUNCIONES  * * * * * * * * * */
 
 function updateDiscProperties () {
+  let PLAYER_LIST = room.getPlayerList();
+  PLAYER_LIST.forEach((player) => {
+    if(player.team) room.setPlayerDiscProperties(player.id, value);
+  });
   for (let [PLAYER_ID, PROPERTIES] of Object.entries(playersDiscProperties)){
     room.setPlayerDiscProperties(key, value);
   }
