@@ -5,7 +5,11 @@ room.pluginSpec = {
   name: `...`,
 };
 
+/* * * * * * * * * *  VARIABLES  * * * * * * * * * */
+
 const GM = room.getPlugin(`test/game/core`).getGameObject();
+
+/* * * * * * * * * * * EVENTOS * * * * * * * * * * */
 
 room.onGameStart    = () => GM.setGameState(1);
 room.onGameStop     = () => GM.setGameState(0);
