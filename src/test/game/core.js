@@ -22,7 +22,7 @@ class Game {
     this.setOriginalBallProperties = function(BALL_PROPERTIES){
       ORIGINAL_BALL_PROPERTIES = BALL_PROPERTIES;
     }
-    this.setOriginalPlayerDiscProperties = function(PLAYER_DISC_PROPERTIES, TEAM){
+    this.setOriginalPlayerDiscProperties = function(TEAM, PLAYER_DISC_PROPERTIES){
       ORIGINAL_PLAYER_DISC_PROPERTIES[TEAM] = PLAYER_DISC_PROPERTIES;
     }
   }
