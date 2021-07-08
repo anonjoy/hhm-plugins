@@ -8,34 +8,27 @@ room.pluginSpec = {
 
 /* * * * * * * * * *  VARIABLES  * * * * * * * * * */
 
-const GAME = room.getPlugin(`test/game/core`).getGameObject();
+const GM = room.getPlugin(`test/game/core`).getGameObject();
 
 /* * * * * * * * * *  FUNCIONES  * * * * * * * * * */
 
 const filterDiscProperties = ({x, y, xspeed, yspeed, ...DISC_PROPERTIES}) => DISC_PROPERTIES;
 
 function onStadiumChangeHandler(newStadiumName, byPlayer){
-  GAME.setOriginalPlayerDiscProperties(1, null);
-  GAME.setOriginalPlayerDiscProperties(2, null);
-  GAME.setOriginalBallProperties(null);
+  GM.setOriginalPlayerDiscProperties(1, null);
+  GM.setOriginalPlayerDiscProperties(2, null);
+  GM.setOriginalBallProperties(null);
 }
 
 function onGameStartHandler(){
-  if(!GAME.getOriginalBallProperties()) GAME.setOriginalBallProperties(filterDiscProperties(room.getDiscProperties(0)));
-  if(!GAME.getOriginalPlayerDiscProperties(1)){
-    let RED_PLAYER  = room.getPlayerList().find((player) => player.team == 1);
-    if(RED_PLAYER)  GAME.setOriginalPlayerDiscProperties(1, filterDiscProperties(room.getPlayerDiscProperties(RED_PLAYER.id))); // if !== undefined
-  }
-  if(!GAME.getOriginalPlayerDiscProperties(2)){
-    let BLUE_PLAYER = room.getPlayerList().find((player) => player.team == 2);
-    if(BLUE_PLAYER) GAME.setOriginalPlayerDiscProperties(2, filterDiscProperties(room.getPlayerDiscProperties(BLUE_PLAYER.id))); // if !== undefined
-  }
+  if(!GM.getOriginalBallProperties()) GM.setOriginalBallProperties(filterDiscProperties(room.getDiscProperties(0)));
+  if(!GM.getOriginalPlayerDiscProperties(1)) GM.setOriginalPlayerDiscProperties(1, filterDiscProperties(room.getPlayerDiscProperties(room.getPlayerList().find((player) => player.team == 1))));
+  if(!GM.getOriginalPlayerDiscProperties(2)) GM.setOriginalPlayerDiscProperties(2, filterDiscProperties(room.getPlayerDiscProperties(room.getPlayerList().find((player) => player.team == 2))));
+  // `getPlayerDiscProperties` devuelve `null` si no encuentra al jugador
 }
 
 function onPlayerTeamChangeHandler(changedPlayer, byPlayer){
-  if(changedPlayer.team && !GAME.getOriginalPlayerDiscProperties(changedPlayer.team)){
-    if(GAME.getState()) GAME.setOriginalBallProperties(changedPlayer.team, filterDiscProperties(room.getPlayerDiscProperties(changedPlayer.id))); // if !== 0 || !== undefined
-  }
+  if(changedPlayer.team && !GM.getOriginalPlayerDiscProperties(changedPlayer.team) && GM.getGameState()) GM.setOriginalBallProperties(changedPlayer.team, filterDiscProperties(room.getPlayerDiscProperties(changedPlayer.id)));
 }
 
 /* * * * * * * * * * * EVENTOS * * * * * * * * * * */
