@@ -16,5 +16,4 @@ class Game {
 }
 
 const GM = new Game();
-
-room.getGameObject = () => GM;
+const getGameObject = () => GM;
