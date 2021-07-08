@@ -2,7 +2,7 @@
 var room = HBInit();
 
 room.pluginSpec = {
-  name: `test/disc-properties/pdpc`, // Player Disc Properties Commands
+  name: `...`, // Player Disc Properties Commands
 };
 
 /* * * * * * * * * *  VARIABLES  * * * * * * * * * */
