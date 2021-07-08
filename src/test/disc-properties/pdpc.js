@@ -66,6 +66,7 @@ const DISC_PROPERTIES_LIST = {
 
 const AUTHORIZED_ROLES = room.getConfig().allowRoles;
 const filterDiscProperties = ({x, y, xspeed, yspeed, ...DISC_PROPERTIES}) => DISC_PROPERTIES;
+const getPlayerDiscProperties = (PLAYER_ID) => {...playersDiscProperties[PLAYER_ID]}; 
 
 function error(ERROR, PLAYER_ID, ARGUMENT){
   let MESSAGE = `The argument '` + ARGUMENT + `' is not a valid `;
